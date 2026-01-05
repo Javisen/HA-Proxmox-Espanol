@@ -1,0 +1,17 @@
+alias: Speedtest
+description: ""
+mode: single
+triggers:
+  - entity_id:
+      - input_button.speed_test
+    to: "on"
+    trigger: state
+conditions: []
+actions:
+  - target:
+      entity_id:
+        - sensor.speedtest_descarga
+        - sensor.speedtest_ping
+        - sensor.speedtest_subida
+    data: {}
+    action: homeassistant.update_entity
