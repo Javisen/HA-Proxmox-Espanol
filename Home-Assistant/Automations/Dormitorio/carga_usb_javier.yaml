@@ -1,0 +1,29 @@
+alias: USB Javier
+description: ""
+triggers:
+  - entity_id:
+      - sensor.note13_battery_level
+    below: 75
+    id: "75"
+    trigger: numeric_state
+  - entity_id:
+      - sensor.note13_battery_level
+    above: 90
+    id: "90"
+    trigger: numeric_state
+conditions:
+  - condition: time
+    after: "20:00:00"
+    before: "08:00:00"
+    weekday:
+      - mon
+      - tue
+      - wed
+      - thu
+      - fri
+      - sat
+      - sun
+actions:
+  - data: {}
+    action: script.usb_javier_noche
+mode: single
