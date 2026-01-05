@@ -1,0 +1,77 @@
+alias: Despertador Javier
+description: >-
+  Despertador con amanecer rápido, mensaje según día y eventos del calendario de
+  hoy.
+triggers:
+  - trigger: time
+    at: input_datetime.despertador_hora
+conditions: []
+actions:
+  - action: light.turn_on
+    target:
+      entity_id: light.lampara_javier
+    data:
+      color_temp: 500
+      brightness_pct: 1
+  - repeat:
+      count: 10
+      sequence:
+        - action: light.turn_on
+          target:
+            entity_id: light.lampara_javier
+          data:
+            brightness_step_pct: 10
+            color_temp: "{{ 500 - (repeat.index * 10) }}"
+        - delay: "00:00:03"
+  - variables:
+      mensaje_buenos_dias: |
+        {% set dia = now().weekday() %} {% set mensajes = {
+          0: "Feliz lunes. Empieza la semana con energía.",
+          1: "Hoy es martes. A por todas.",
+          2: "Miércoles, ya va quedando menos.",
+          3: "Jueves. El fin de semana está cerca.",
+          4: "Viernes. Último empujón.",
+          5: "Sábado. Que tengas un día relajado.",
+          6: "Domingo. Aprovecha para descansar."
+        } %} {{ mensajes[dia] }}
+  - variables:
+      sensores_cal:
+        - sensor.evento_calendario_familia
+        - sensor.evento_calendario_javier
+        - sensor.evento_calendario_personal
+      eventos_hoy: |
+        {% set lista = [] %} {% for s in sensores_cal %}
+          {% set inicio = state_attr(s, 'start_time') %}
+          {% set titulo = states(s) %}
+          {% if inicio not in ['unknown','unavailable',None] %}
+            {% set dt = as_datetime(inicio) %}
+            {% if dt.date() == now().date() and titulo not in ['unknown','unavailable','No tienes ningún evento'] %}
+              {% set lista = lista + [ {'hora': dt.strftime('%H:%M'), 'titulo': titulo } ] %}
+            {% endif %}
+          {% endif %}
+        {% endfor %} {{ lista | sort(attribute='hora') }}
+      texto_eventos: |
+        {% if eventos_hoy | length == 0 %}
+          Hoy no tienes ningún evento.
+        {% elif eventos_hoy | length == 1 %}
+          Tienes un evento hoy a las {{ eventos_hoy[0].hora }}: {{ eventos_hoy[0].titulo }}.
+        {% else %}
+          Hoy tienes {{ eventos_hoy | length }} eventos: 
+          {% for e in eventos_hoy %}
+            A las {{ e.hora }}: {{ e.titulo }}{% if not loop.last %}; {% endif %}
+          {% endfor %}.
+        {% endif %}
+  - variables:
+      mensaje_final: |
+        Buenos días. {{ mensaje_buenos_dias }} {{ texto_eventos }}
+  - action: tts.speak
+    target:
+      entity_id:
+        - tts.home_assistant_cloud
+    data:
+      media_player_entity_id: media_player.dormitorio_javier
+      message: "{{ mensaje_final }}"
+      language: es-ES
+      options:
+        voice: VeraNeural
+mode: single
