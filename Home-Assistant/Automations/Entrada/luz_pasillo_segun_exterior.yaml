@@ -1,0 +1,33 @@
+alias: Luz pasillo según luz exterior
+description: Enciende o apaga la luz del pasillo según la iluminación exterior
+triggers:
+  - entity_id:
+      - sensor.sensor_iluminacion_illuminance
+    below: 300
+    id: encender
+    trigger: numeric_state
+  - entity_id:
+      - sensor.sensor_iluminacion_illuminance
+    above: 350
+    id: apagar
+    trigger: numeric_state
+conditions: []
+actions:
+  - choose:
+      - conditions:
+          - condition: trigger
+            id:
+              - encender
+        sequence:
+          - target:
+              entity_id: switch.luz_pasillo
+            action: switch.turn_on
+      - conditions:
+          - condition: trigger
+            id: apagar
+        sequence:
+          - target:
+              entity_id: switch.luz_pasillo
+            action: switch.turn_off
+mode: restart
+# Esta automatizacion activa un rele que enciende la luz del pasillo. Detras de este rele hay 3 pirs mecanicos que son los que se encargan de encender y apagar las luces mientras hay alguien pasando. Esto es asi porque puedes entrar y salir de una habitacion y se encendera la luz sin importar reactivaciones de sensores inteligentes
