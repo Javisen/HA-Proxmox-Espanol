@@ -1,0 +1,71 @@
+alias: "Lavadora: Gestión y Avisos de Audio"
+description: Controla el estado del input_select y lanza audios de inicio y fin
+triggers:
+  - entity_id: sensor.lavadora_potencia
+    above: 5
+    for: "00:03:00"
+    id: inicio
+    trigger: numeric_state
+  - entity_id: sensor.lavadora_potencia
+    below: 5
+    for: "00:03:00"
+    id: fin
+    trigger: numeric_state
+  - entity_id: binary_sensor.puerta_lavadora_contact
+    to: "on"
+    id: puerta_abierta
+    trigger: state
+actions:
+  - choose:
+      - conditions:
+          - condition: trigger
+            id: inicio
+        sequence:
+          - target:
+              entity_id: input_select.estado_de_lavado
+            data:
+              option: Lavando
+            action: input_select.select_option
+          - target:
+              entity_id:
+                - media_player.dormitorio_javier
+                - media_player.salon
+                - media_player.bano
+            data:
+              media:
+                media_content_id: /local/notificaciones/nuevas/lavado-iniciado.mp3
+                media_content_type: audio/mp3
+                metadata: {}
+            action: media_player.play_media
+      - conditions:
+          - condition: trigger
+            id: fin
+          - condition: state
+            entity_id: input_select.estado_de_lavado
+            state: Lavando
+        sequence:
+          - target:
+              entity_id: input_select.estado_de_lavado
+            data:
+              option: Terminado
+            action: input_select.select_option
+          - target:
+              entity_id:
+                - media_player.dormitorio_javier
+                - media_player.salon
+            data:
+              media:
+                media_content_id: /local/notificaciones/nuevas/lavado_finalizado.mp3
+                media_content_type: audio/mp3
+                metadata: {}
+            action: media_player.play_media
+      - conditions:
+          - condition: trigger
+            id: puerta_abierta
+        sequence:
+          - target:
+              entity_id: input_select.estado_de_lavado
+            data:
+              option: Apagada
+            action: input_select.select_option
+mode: restart
