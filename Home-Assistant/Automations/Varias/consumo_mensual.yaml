@@ -1,0 +1,19 @@
+alias: Consumo mensual Notificación
+description: ""
+triggers:
+  - at: "23:59"
+    trigger: time
+conditions:
+  - condition: template
+    value_template: "{{ now().day == states(\"sensor.ultimo_dia_del_mes\") }}"
+actions:
+  - action: notify.send_message
+    metadata: {}
+    target:
+      entity_id: notify.telegram_bot_personal
+    data:
+      message: >-
+        " El consumo mensual es de: {{ states('sensor.consumo_general_mensual')
+        }} kW"
+      title: Consumo mensual
+mode: single
