@@ -1,0 +1,21 @@
+alias: Cocina - A. Encendido por Detección
+description: Enciende la luz si hay movimiento o presencia y es de noche.
+triggers:
+  - entity_id: binary_sensor.pir_cocina_occupancy
+    to: "on"
+    trigger: state
+  - entity_id: binary_sensor.presencia_cocina_occupancy
+    to: "on"
+    trigger: state
+conditions:
+  - condition: numeric_state
+    entity_id: sensor.sensor_iluminacion_illuminance
+    below: 600
+  - condition: state
+    entity_id: switch.luz_cocina
+    state: "off"
+actions:
+  - target:
+      entity_id: switch.luz_cocina
+    action: switch.turn_on
+mode: single
