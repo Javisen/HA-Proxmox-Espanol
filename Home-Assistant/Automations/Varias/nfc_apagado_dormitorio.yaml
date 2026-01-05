@@ -1,0 +1,12 @@
+alias: Se escanea la etiqueta Apagar dormitorio
+description: ""
+mode: single
+triggers:
+  - tag_id: b3f1d168-63b5-450a-8357-57d072411c1f
+    trigger: tag
+conditions: []
+actions:
+  - data: {}
+    target:
+      entity_id: automation.apagado_dormitorio
+    action: automation.turn_on
