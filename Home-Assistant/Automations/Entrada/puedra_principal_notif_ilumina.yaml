@@ -1,0 +1,68 @@
+alias: Puerta Principal - Iluminación y Notificación
+description: >-
+  Gestiona la iluminación de la entrada al abrir/cerrar y notifica cuando se
+  abre.
+triggers:
+  - entity_id: binary_sensor.puerta_principal_contact
+    to: "on"
+    id: puerta_abierta
+    trigger: state
+  - entity_id: binary_sensor.puerta_principal_contact
+    to: "off"
+    id: puerta_cerrada
+    trigger: state
+conditions: []
+actions:
+  - choose:
+      - conditions:
+          - condition: trigger
+            id: puerta_abierta
+        sequence:
+          - if:
+              - condition: numeric_state
+                entity_id: sensor.sensor_iluminacion_illuminance
+                below: 300
+            then:
+              - target:
+                  entity_id: switch.luz_entrada
+                action: switch.turn_on
+          - condition: not
+            conditions:
+              - condition: zone
+                entity_id: person.javier
+                zone: zone.home
+          - target:
+              entity_id:
+                - media_player.dormitorio
+                - media_player.salon
+            data:
+              volume_level: 0.25
+            action: media_player.volume_set
+          - data:
+              media:
+                media_content_id: /local/notificaciones/puerta_principal.mp3
+                media_content_type: audio/mp3
+                metadata: {}
+            target:
+              entity_id:
+                - media_player.dormitorio
+                - media_player.salon
+            action: media_player.play_media
+          - data:
+              data:
+                type: tts
+              target: media_player.echo_dot_estudio media_player.echo_show_cocina
+              message: Puerta principal abierta
+            action: notify.alexa_media
+      - conditions:
+          - condition: trigger
+            id: puerta_cerrada
+          - condition: numeric_state
+            entity_id: sensor.sensor_iluminacion_illuminance
+            below: 300
+        sequence:
+          - delay: "00:00:20"
+          - target:
+              entity_id: switch.luz_entrada
+            action: switch.turn_off
+mode: restart
