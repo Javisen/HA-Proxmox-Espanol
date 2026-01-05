@@ -20,7 +20,7 @@ Lógica avanzada de iluminación que combina dos tecnologías para evitar apagad
     * Sensor PIR de movimiento (`pir_cocina_occupancy`).
     * Sensor de luminosidad (`sensor_iluminacion_illuminance`).
     * Sensor de contacto magnético (`binary_sensor.puerta_congelador_contact`).
-* **Multimedia**: Los audios se encuentran en la carpeta raíz [`/Media/Notificaciones`](../../media/Notificaciones).
+* **Multimedia**: Los audios se encuentran en la carpeta raíz [`/Media/Notificaciones`](../../main/Media/Notificaciones).
 
 ---
 *Para ver la gestión avanzada de la colada, consulta la subcarpeta [Lavadora](./Lavadora).*
