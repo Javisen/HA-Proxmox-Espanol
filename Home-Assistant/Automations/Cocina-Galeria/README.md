@@ -4,4 +4,4 @@ Algunas automatizaciones para electrodomesticos o iluminacion, control de presen
 - Ayudantes (Helpers): input_boolean para marcar que hay ropa dentro de la lavadora.
 - Integraciones: Zigbee2MQTT  para los sensores
 
-  
+
