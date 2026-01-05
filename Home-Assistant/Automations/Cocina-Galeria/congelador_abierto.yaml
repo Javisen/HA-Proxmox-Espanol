@@ -4,7 +4,7 @@ triggers:
   - trigger: state
     entity_id: binary_sensor.puerta_congelador_contact
     to: "on"
-    for: "00:01:30" # El trigger espera el tiempo exacto
+    for: "00:01:30"
 actions:
   - action: media_player.play_media
     target:
