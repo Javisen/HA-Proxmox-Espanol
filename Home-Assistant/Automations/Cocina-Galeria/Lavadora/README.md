@@ -34,3 +34,9 @@ Debes crear el siguiente ayudante desde la interfaz de Home Assistant (Ajustes >
 
 ---
 *Nota: Asegúrate de ajustar las entidades de los `media_player` a los nombres de tus propios altavoces.*
+
+### 🎵 Recursos de Audio
+Puedes encontrar los sonidos utilizados en estas automatizaciones en la carpeta de medios del repositorio:
+* [🔔 Lavado Iniciado](../../Media/Notificaciones/lavado-iniciado.mp3)
+* [✅ Lavado Finalizado](../../Media/Notificaciones/lavado_finalizado.mp3)
+* [🚪 Recordatorio Lavadora Cerrada](../../Media/Notificaciones/lavadora_cerrada.mp3)
