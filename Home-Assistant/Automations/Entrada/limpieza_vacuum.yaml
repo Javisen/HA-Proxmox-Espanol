@@ -1,0 +1,198 @@
+alias: Limpieza Sebastián - Completa
+description: >-
+  Control total del vacuum: horario, ausencia familia, inicio, fin, atasco y
+  notificaciones
+triggers:
+  - at: input_datetime.aspirador
+    id: programada
+    trigger: time
+    enabled: true
+  - entity_id: group.familia
+    to: not_home
+    for:
+      hours: 0
+      minutes: 5
+      seconds: 0
+    id: familia_fuera
+    trigger: state
+  - entity_id:
+      - vacuum.sebastian
+    to:
+      - cleaning
+    id: inicio
+    trigger: state
+  - entity_id:
+      - vacuum.sebastian
+    to:
+      - returning
+    id: fin
+    trigger: state
+  - entity_id:
+      - vacuum.sebastian
+    to:
+      - error
+    id: atascado
+    trigger: state
+actions:
+  - choose:
+      - conditions:
+          - condition: and
+            conditions:
+              - condition: trigger
+                id:
+                  - familia_fuera
+                  - programada
+              - condition: time
+                before: "14:00:00"
+                weekday:
+                  - mon
+                  - tue
+                  - wed
+                  - thu
+                  - fri
+                  - sat
+                  - sun
+                after: "08:00:00"
+        sequence:
+          - data:
+              target:
+                - media_player.echo_dot_estudio
+                - media_player.echo_show_cocina
+              message: >-
+                Se va a activar la limpieza dentro de 15 minutos. Retira
+                cualquier obstáculo.
+              data:
+                type: announce
+            action: notify.alexa_media
+          - wait_template: ""
+            continue_on_timeout: true
+            timeout: "00:15:00"
+          - target:
+              entity_id: vacuum.sebastian
+            action: vacuum.start
+            data: {}
+      - conditions:
+          - condition: trigger
+            id: inicio
+        sequence:
+          - variables:
+              vol_dormitorio: >-
+                {{ state_attr('media_player.dormitorio_javier','volume_level')
+                }}
+              vol_estudio: "{{ state_attr('media_player.salon','volume_level') }}"
+              vol_cocina: "{{ state_attr('media_player.echo_show_cocina','volume_level') }}"
+          - data:
+              volume_level: 0.15
+            action: media_player.volume_set
+            target:
+              entity_id: media_player.dormitorio_javier
+          - data:
+              volume_level: 0.2
+            action: media_player.volume_set
+            target:
+              entity_id: media_player.salon
+          - data:
+              volume_level: 0.3
+            action: media_player.volume_set
+            target:
+              entity_id: media_player.echo_show_cocina
+          - target:
+              entity_id:
+                - media_player.dormitorio_javier
+                - media_player.echo_show_cocina
+                - media_player.salon
+            data:
+              media:
+                media_content_id: /local/notificaciones/nuevas/sebastian_limpia.mp3
+                media_content_type: audio/mp3
+            action: media_player.play_media
+          - data:
+              target:
+                - media_player.echo_dot_estudio
+              message: Sebastián ha iniciado la limpieza. Te avisaré cuando finalice.
+              data:
+                type: tts
+            action: notify.alexa_media
+          - data:
+              message: Sebastián ha iniciado la limpieza. Te avisaré cuando finalice.
+              language: es
+              entity_id: media_player.salon
+            action: tts.google_say
+          - data:
+              volume_level: "{{ vol_dormitorio }}"
+            action: media_player.volume_set
+            target:
+              entity_id: media_player.salon
+          - data:
+              volume_level: "{{ vol_cocina }}"
+            action: media_player.volume_set
+            target:
+              entity_id: media_player.salon
+      - conditions:
+          - condition: trigger
+            id: fin
+        sequence:
+          - target:
+              entity_id:
+                - media_player.dormitorio_javier
+                - media_player.salon
+            data:
+              volume_level: 0.2
+            action: media_player.volume_set
+          - target:
+              entity_id:
+                - media_player.dormitorio_javier
+                - media_player.salon
+            data:
+              media:
+                media_content_id: /local/notificaciones/nuevas/sebastian_finaliza.mp3
+                media_content_type: audio/mp3
+            action: media_player.play_media
+          - data:
+              target:
+                - media_player.echo_dot_estudio
+                - media_player.echo_show_cocina
+              message: >-
+                Sebastián ha finalizado la limpieza. Si ha fregado, quita el
+                depósito.
+              data:
+                type: tts
+            action: notify.alexa_media
+      - conditions:
+          - condition: trigger
+            id: atascado
+        sequence:
+          - target:
+              entity_id:
+                - media_player.dormitorio_javier
+                - media_player.salon
+            data:
+              volume_level: 0.3
+            action: media_player.volume_set
+          - target:
+              entity_id:
+                - media_player.dormitorio_javier
+                - media_player.salon
+            data:
+              media:
+                media_content_id: /local/notificaciones/nuevas/sebastian_atascado.mp3
+                media_content_type: audio/mp3
+            action: media_player.play_media
+          - data:
+              target:
+                - media_player.echo_dot_estudio
+                - media_player.echo_show_cocina
+              message: >-
+                Atención, Sebastián se ha atascado. Revisa que no tenga cables u
+                obstáculos.
+              data:
+                type: tts
+            action: notify.alexa_media
+          - data:
+              entity_id: media_player.bano
+              message: >-
+                Atención, Sebastián se ha atascado. Revisa que no tenga cables u
+                obstáculos.
+              language: es
+            action: tts.google_say
+mode: restart
