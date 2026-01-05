@@ -12,3 +12,5 @@ Que tiene de bueno estas automatizaciones comparadas con una automatizacion simp
   - Gestión de errores: El código ignora valores unknown o 0 para no dar mensajes erróneos si la báscula falla.
   - Aleatoriedad: Utiliza random para que los mensajes no sean siempre iguales y no resulten monótonos.
   - Historial: La segunda automatización busca en el historial del sensor para asegurar que el peso de "ayer" sea el último registrado antes de medianoche.
+
+Asegurate de buscar y cambiar el nombre "Sonia" por el que tu necesites
