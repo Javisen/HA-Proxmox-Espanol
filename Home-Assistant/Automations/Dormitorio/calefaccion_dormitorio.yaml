@@ -1,0 +1,51 @@
+alias: Calefacción Dormitorio
+description: ""
+triggers:
+  - entity_id:
+      - sensor.dormitorio_temperature
+    above: 19
+    id: Alta
+    trigger: numeric_state
+    attribute: temperature
+  - entity_id:
+      - sensor.dormitorio_temperature
+    id: Baja
+    trigger: numeric_state
+    below: 18
+    attribute: temperature
+conditions:
+  - condition: time
+    after: "20:00:00"
+    before: "07:00:00"
+    weekday:
+      - sun
+      - sat
+      - fri
+      - thu
+      - wed
+      - tue
+      - mon
+actions:
+  - choose:
+      - conditions:
+          - condition: trigger
+            id:
+              - Alta
+        sequence:
+          - action: switch.turn_off
+            metadata: {}
+            data: {}
+            target:
+              entity_id: switch.enchufe_dormitorio
+      - conditions:
+          - condition: trigger
+            id:
+              - Baja
+        sequence:
+          - action: switch.turn_on
+            metadata: {}
+            data: {}
+            target:
+              entity_id: switch.enchufe_dormitorio
+    enabled: true
+mode: single
