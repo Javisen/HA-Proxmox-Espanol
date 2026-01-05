@@ -1,0 +1,90 @@
+alias: Gestión Central de Presencia (Llegada y Salida)
+description: >-
+  Activa/desactiva la presencia y automatiza acciones al llegar cualquier
+  miembro o al irse el grupo completo.
+triggers:
+  - entity_id:
+      - person.javier
+      - person.sonia
+    to: home
+    trigger: state
+  - entity_id: group.familia_principal
+    to: not_home
+    trigger: state
+conditions: []
+actions:
+  - choose:
+      - conditions:
+          - condition: template
+            value_template: "{{ trigger.entity_id == 'group.familia_principal' }}"
+        sequence:
+          - target:
+              entity_id: input_boolean.presencia_en_casa
+            action: input_boolean.turn_off
+          - target:
+              entity_id: all
+            action: light.turn_off
+          - target:
+              entity_id:
+                - switch.luz_cocina
+                - switch.luz_habitacion_pau
+            action: switch.turn_off
+          - choose:
+              - conditions:
+                  - condition: numeric_state
+                    entity_id: sensor.amplificador_power
+                    above: 8
+                sequence:
+                  - target:
+                      entity_id: scene.amplificador_on_off
+                    action: scene.turn_on
+                    data: {}
+      - conditions:
+          - condition: template
+            value_template: "{{ trigger.to_state.state == 'home' }}"
+        sequence:
+          - target:
+              entity_id: input_boolean.presencia_en_casa
+            action: input_boolean.turn_on
+          - choose:
+              - conditions:
+                  - condition: state
+                    entity_id: vacuum.sebastian
+                    state:
+                      - cleaning
+                sequence:
+                  - action: vacuum.return_to_base
+                    data: {}
+                    target:
+                      entity_id: vacuum.sebastian
+          - choose:
+              - conditions:
+                  - condition: numeric_state
+                    entity_id: sensor.sensor_iluminacion_illuminance
+                    below: 900
+                sequence:
+                  - target:
+                      entity_id: switch.luz_pasillo
+                    action: switch.turn_on
+          - choose:
+              - conditions:
+                  - condition: template
+                    value_template: "{{ trigger.entity_id == 'person.javier' }}"
+                sequence:
+                  - data:
+                      message: >-
+                        Has vuelto a casa. La alarma se ha desactivado y todo ha
+                        vuelto a la normalidad
+                      title: Bienvenido
+                    action: notify.mobile_app_javier
+              - conditions:
+                  - condition: template
+                    value_template: "{{ trigger.entity_id == 'person.sonia' }}"
+                sequence:
+                  - data:
+                      message: >-
+                        Has vuelto a casa. La alarma se ha desactivado y todo ha
+                        vuelto a la normalidad
+                      title: Bienvenida
+                    action: notify.mobile_app_sonia
+mode: single
