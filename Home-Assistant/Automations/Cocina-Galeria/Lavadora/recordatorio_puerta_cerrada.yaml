@@ -1,0 +1,30 @@
+alias: "Lavadora: Recordatorio Puerta Cerrada"
+description: Aviso de audio recurrente cada 5 min si no se abre la puerta
+triggers:
+  - entity_id: input_select.estado_de_lavado
+    to: Terminado
+    for: "00:05:00"
+    trigger: state
+actions:
+  - repeat:
+      while:
+        - condition: state
+          entity_id: binary_sensor.puerta_lavadora_contact
+          state: "off"
+        - condition: state
+          entity_id: input_select.estado_de_lavado
+          state: Terminado
+      sequence:
+        - target:
+            entity_id:
+              - media_player.dormitorio_javier
+              - media_player.salon
+              - media_player.bano
+          data:
+            media:
+              media_content_id: /local/notificaciones/nuevas/lavadora_cerrada.mp3
+              media_content_type: audio/mp3
+              metadata: {}
+          action: media_player.play_media
+        - delay: "00:05:00"
+mode: restart
