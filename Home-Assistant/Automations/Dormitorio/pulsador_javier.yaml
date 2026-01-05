@@ -1,0 +1,72 @@
+alias: Pulsador Javier
+description: ""
+triggers:
+  - domain: mqtt
+    device_id: a43cdc9037dc0e11b74ef2d9cfe82128
+    type: action
+    subtype: single
+    discovery_id: 0x00158d000456e5ef action_single
+    id: Single
+    trigger: device
+  - domain: mqtt
+    device_id: a43cdc9037dc0e11b74ef2d9cfe82128
+    type: action
+    subtype: double
+    id: Double
+    trigger: device
+  - domain: mqtt
+    device_id: a43cdc9037dc0e11b74ef2d9cfe82128
+    type: action
+    subtype: triple
+    id: Triple
+    trigger: device
+  - domain: mqtt
+    device_id: a43cdc9037dc0e11b74ef2d9cfe82128
+    type: action
+    subtype: hold
+    id: Hold
+    trigger: device
+conditions: []
+actions:
+  - choose:
+      - conditions:
+          - condition: trigger
+            id:
+              - Single
+        sequence:
+          - action: light.toggle
+            metadata: {}
+            data: {}
+            target:
+              entity_id: light.lampara_javier
+      - conditions:
+          - condition: trigger
+            id:
+              - Double
+        sequence:
+          - action: switch.toggle
+            metadata: {}
+            data: {}
+            target:
+              entity_id: switch.luz_dormitorio
+      - conditions:
+          - condition: trigger
+            id:
+              - Triple
+        sequence:
+          - action: switch.toggle
+            metadata: {}
+            target:
+              entity_id: switch.luz_entrada_dormitorio
+            data: {}
+      - conditions:
+          - condition: trigger
+            id:
+              - Hold
+        sequence:
+          - action: switch.toggle
+            metadata: {}
+            data: {}
+            target:
+              entity_id: switch.television_dormitorio
+mode: single
