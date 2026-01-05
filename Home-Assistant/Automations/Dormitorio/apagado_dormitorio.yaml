@@ -1,0 +1,42 @@
+alias: Apagado Dormitorio
+description: Anuncia un mensaje relajante con tts cloud y apaga la electrónica
+triggers:
+  - trigger: time
+    at: input_datetime.apagado_dormitorio
+conditions: []
+actions:
+  - action: media_player.volume_set
+    target:
+      entity_id: media_player.dormitorio_javier
+    data:
+      volume_level: 0.15
+  - action: tts.speak
+    target:
+      entity_id: tts.google_cloud
+    data:
+      language: es-ES
+      media_player_entity_id: media_player.dormitorio_javier
+      cache: true
+      options:
+        voice: es-ES-Wavenet-E
+      message: >-
+        Es la hora de descansar. Dentro de treinta minutos apagaré las luces y
+        la televisión. Buenas noches.
+  - delay:
+      hours: 0
+      minutes: 30
+      seconds: 0
+      milliseconds: 0
+  - action: light.turn_off
+    data: {}
+    target:
+      entity_id:
+        - light.lampara_javier
+        - light.lampara_sonia
+  - action: switch.turn_off
+    target:
+      entity_id:
+        - switch.luz_dormitorio
+        - switch.television_dormitorio
+    data: {}
+mode: single
