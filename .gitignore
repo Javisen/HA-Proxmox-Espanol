@@ -1,0 +1,11 @@
+# Secretos de Home Assistant (¡Muy importante!)
+secrets.yaml
+
+# Bases de datos y archivos de respaldo
+*.db
+*.db-shm
+*.db-wal
+*.log
+
+# Archivos de entorno de Docker
+.env
