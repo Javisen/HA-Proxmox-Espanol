@@ -1,0 +1,52 @@
+alias: Felicitación/Motivación Peso Motivadora (sin IA mejorada)
+description: Mensajes motivacionales y variados según el peso
+triggers:
+  - entity_id: sensor.bluetooth_proxy_router_peso_sonia
+    trigger: state
+actions:
+  - variables:
+      sensor_raw: "{{ states('sensor.bluetooth_proxy_router_peso_sonia') }}"
+      peso_anterior: "{{ states('input_number.peso_dia_anterior') | float }}"
+      peso_actual_real: |
+        {% if sensor_raw in ['unknown', 'unavailable', 'none', '0', 0] %}
+          {{ peso_anterior }}
+        {% else %}
+          {{ sensor_raw | float }}
+        {% endif %}
+      diferencia: "{{ (peso_anterior - peso_actual_real) | round(2) }}"
+      subida: "{{ (peso_actual_real - peso_anterior) | round(2) }}"
+  - variables:
+      mensaje_generado: |
+        {% set dif = diferencia %}
+        {# --- FELICITACIÓN --- #} {% if dif > 0.2 %}
+          {% set opciones = [
+            "¡Sonia, enhorabuena! Has bajado " ~ dif ~ " kilos. ¡Estás increíble!",
+            "Bravo Sonia, hoy bajaste " ~ dif ~ " kilos. ¡Sigue así que lo estás logrando!",
+            "Sonia, ¡qué pasada! Bajaste " ~ dif ~ " kilos. Tu esfuerzo se nota un montón."
+          ] %}
+
+        {# --- MANTENIMIENTO / ESTABILIDAD --- #} {% elif dif > -0.2 %}
+          {% set opciones = [
+            "Sonia, te has mantenido estable. ¡Muy bien! La constancia es la clave.",
+            "Tu peso está prácticamente igual, Sonia. ¡No te desanimes, vas genial!",
+            "Sonia, hoy te mantuviste. Esto también es avanzar, sigue adelante."
+          ] %}
+
+        {# --- AUMENTO --- #} {% else %}
+          {% set opciones = [
+            "Sonia, hoy has subido " ~ (dif * -1) | round(2) ~ " kilos. No pasa nada, días así son normales. Tú puedes.",
+            "Sonia, subiste un poco, pero no te preocupes. Lo importante es seguir adelante.",
+            "Hoy marcó un poquito más, Sonia. Es normal. Sigue con calma, lo estás haciendo muy bien."
+          ] %}
+        {% endif %}
+        {{ opciones | random }}
+  - target:
+      entity_id: tts.google_cloud
+    data:
+      media_player_entity_id: media_player.bano
+      message: "{{ mensaje_generado }}"
+      language: es-ES
+      options:
+        voice: es-ES-Wavenet-H
+    action: tts.speak
+mode: single
