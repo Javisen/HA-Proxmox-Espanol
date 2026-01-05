@@ -1,0 +1,21 @@
+alias: "Baño temperatura óptima "
+description: ""
+triggers:
+  - entity_id:
+      - sensor.bano_temperature
+    above: 20
+    trigger: numeric_state
+conditions: []
+actions:
+  - action: media_player.play_media
+    data:
+      media:
+        media_content_id: /local/notificaciones/nuevas/temperatura_baño.mp3
+        media_content_type: audio/mp3
+        metadata: {}
+    target:
+      entity_id:
+        - media_player.dormitorio_javier
+        - media_player.bano
+        - media_player.salon
+mode: single
