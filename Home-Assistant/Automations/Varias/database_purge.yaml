@@ -1,0 +1,13 @@
+alias: Database purge
+description: ""
+triggers:
+  - at: "03:30:00"
+    trigger: time
+conditions: []
+actions:
+  - data:
+      keep_days: "30"
+      apply_filter: true
+      repack: true
+    action: recorder.purge
+mode: single
