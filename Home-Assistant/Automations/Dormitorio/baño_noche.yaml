@@ -1,0 +1,61 @@
+alias: Baño Noche
+description: ""
+triggers:
+  - entity_id:
+      - binary_sensor.pir_bano_occupancy
+    to: "on"
+    id: ocupado
+    from: "off"
+    trigger: state
+  - entity_id:
+      - binary_sensor.pir_bano_occupancy
+    to: "off"
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 9
+    id: no_ocupado
+    from: "on"
+    trigger: state
+conditions:
+  - condition: time
+    weekday:
+      - sun
+      - sat
+      - fri
+      - thu
+      - wed
+      - tue
+      - mon
+    after: "22:00:00"
+    before: "08:00:00"
+actions:
+  - if:
+      - condition: trigger
+        id: ocupado
+    then:
+      - metadata: {}
+        data:
+          rgb_color:
+            - 0
+            - 0
+            - 255
+        target:
+          entity_id:
+            - light.luz_bano_noche
+        action: light.turn_on
+  - if:
+      - condition: trigger
+        id: no_ocupado
+    then:
+      - delay:
+          hours: 0
+          minutes: 0
+          seconds: 30
+          milliseconds: 0
+      - data: {}
+        target:
+          entity_id:
+            - light.luz_bano_noche
+        action: light.turn_off
+mode: single
