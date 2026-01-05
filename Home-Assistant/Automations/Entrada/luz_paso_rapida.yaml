@@ -1,0 +1,32 @@
+alias: Luz de Paso Rápida (30s) con Anulación por Puerta
+description: >-
+  Enciende la luz 30s por PIR y la mantiene encendida si la Puerta Principal se
+  abre.
+triggers:
+  - entity_id: binary_sensor.pir_entrada_occupancy
+    to: "on"
+    id: pir_activado
+    trigger: state
+conditions:
+  - condition: numeric_state
+    entity_id: sensor.sensor_iluminacion_illuminance
+    below: 400
+actions:
+  - target:
+      entity_id: switch.luz_entrada
+    action: switch.turn_on
+  - wait_for_trigger:
+      - entity_id: binary_sensor.puerta_principal_contact
+        to: "on"
+        id: puerta_abierta_anula
+        trigger: state
+    timeout: "00:00:30"
+    continue_on_timeout: true
+  - if:
+      - condition: template
+        value_template: "{{ wait.trigger is none }}"
+    then:
+      - target:
+          entity_id: switch.luz_entrada
+        action: switch.turn_off
+mode: restart
