@@ -1,0 +1,35 @@
+alias: Timbre puerta
+description: ""
+triggers:
+  - entity_id:
+      - switch.shelly1_timbre
+    to: "on"
+    trigger: state
+conditions: []
+actions:
+  - data: {}
+    action: switch.turn_on
+    target:
+      entity_id: switch.shelly1_timbre
+  - action: media_player.play_media
+    data:
+      media:
+        media_content_id: /local/notificaciones/nuevas/llaman_puerta.mp3
+        media_content_type: audio/mp3
+        metadata: {}
+    target:
+      entity_id:
+        - media_player.salon
+        - media_player.dormitorio
+  - data:
+      target: media_player.echo_dot_estudio
+      data:
+        type: tts
+      message: Han llamado a la puerta
+    action: notify.alexa_media
+  - action: notify.mobile_app
+    metadata: {}
+    data:
+      message: Han llamado al timbre de casa
+      title: Timbre de casa
+mode: single
