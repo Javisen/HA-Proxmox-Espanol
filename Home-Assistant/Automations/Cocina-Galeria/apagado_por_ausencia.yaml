@@ -1,0 +1,20 @@
+alias: Cocina - B. Apagado por Ausencia
+description: Apaga la luz si no hay ninguna detección después de un tiempo de gracia.
+triggers:
+  - entity_id: binary_sensor.presencia_cocina_occupancy
+    to: "off"
+    for: "00:00:30"
+    trigger: state
+conditions:
+  - condition: state
+    entity_id: binary_sensor.pir_cocina_occupancy
+    state: "off"
+    for: "00:00:05"
+  - condition: state
+    entity_id: switch.luz_cocina
+    state: "on"
+actions:
+  - target:
+      entity_id: switch.luz_cocina
+    action: switch.turn_off
+mode: single
