@@ -1,0 +1,14 @@
+alias: Haos Restart
+description: ""
+mode: single
+triggers:
+  - entity_id: input_boolean.restart
+    from: "off"
+    to: "on"
+    trigger: state
+conditions: []
+actions:
+  - target:
+      entity_id: input_boolean.restart
+    action: input_boolean.turn_off
+  - action: homeassistant.restart
