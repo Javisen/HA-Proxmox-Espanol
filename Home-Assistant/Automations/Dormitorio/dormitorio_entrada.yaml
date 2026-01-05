@@ -1,0 +1,27 @@
+alias: Dormitorio entrada
+description: ""
+triggers:
+  - entity_id:
+      - binary_sensor.pir_entrada_dormitorio_occupancy
+    to: "on"
+    trigger: state
+conditions:
+  - condition: numeric_state
+    entity_id: sensor.sensor_iluminacion_illuminance
+    below: 200
+    enabled: true
+actions:
+  - data: {}
+    action: switch.turn_on
+    target:
+      entity_id: switch.luz_entrada_dormitorio
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 15
+      milliseconds: 0
+  - data: {}
+    action: switch.turn_off
+    target:
+      entity_id: switch.luz_entrada_dormitorio
+mode: single
