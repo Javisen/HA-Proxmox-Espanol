@@ -1,28 +1,19 @@
-alias: Congelador abierto
-description: ""
+alias: "Congelador: Aviso Puerta Abierta"
+description: "Avisa si la puerta del congelador queda abierta más de 1:30 min"
 triggers:
-  - minutes: /5
-    trigger: time_pattern
-conditions:
-  - condition: state
+  - trigger: state
     entity_id: binary_sensor.puerta_congelador_contact
-    state: "on"
-    for:
-      hours: 0
-      minutes: 1
-      seconds: 30
+    to: "on"
+    for: "00:01:30" # El trigger espera el tiempo exacto
 actions:
   - action: media_player.play_media
-    data:
-      media:
-        media_content_id: /local/notificaciones/nuevas/congelador_abierto.mp3
-        media_content_type: audio/mp3
-        metadata: {}
     target:
       entity_id:
         - media_player.dormitorio
         - media_player.salon
+    data:
+      media_content_id: /local/notificaciones/nuevas/congelador_abierto.mp3
+      media_content_type: audio/mp3
   - action: notify.alexa_media_echo_dot_estudio
     data:
-      message: "¡Atención!. La puerta del congelador está abierta. "
-mode: single
+      message: "¡Atención!. La puerta del congelador está abierta."
