@@ -1,0 +1,30 @@
+alias: Inicializar Peso Día Anterior Automático (Optimizado)
+description: Guarda el último peso registrado del día anterior
+triggers:
+  - at: "00:01:00"
+    trigger: time
+conditions: []
+actions:
+  - variables:
+      ayer_inicio: "{{ (now() - timedelta(days=1)).replace(hour=0, minute=0, second=0) }}"
+      ayer_fin: "{{ (now() - timedelta(days=1)).replace(hour=23, minute=59, second=59) }}"
+      estados_ayer: |
+        {{
+          states.sensor.bluetooth_proxy_router_peso_sonia
+          .history(period='24h', end=ayer_fin)
+          | selectattr('last_updated', '>=', ayer_inicio)
+          | selectattr('last_updated', '<=', ayer_fin)
+          | list
+        }}
+      peso_ayer: |
+        {% if estados_ayer | length > 0 %}
+          {{ estados_ayer[-1].state | float }}
+        {% else %}
+          {{ states('sensor.bluetooth_proxy_router_peso_sonia') | float }}
+        {% endif %}
+  - target:
+      entity_id: input_number.peso_dia_anterior
+    data:
+      value: "{{ peso_ayer }}"
+    action: input_number.set_value
+mode: single
