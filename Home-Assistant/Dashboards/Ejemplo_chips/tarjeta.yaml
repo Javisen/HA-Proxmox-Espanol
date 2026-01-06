@@ -1,0 +1,142 @@
+type: custom:stack-in-card
+card_mod:
+  style: |
+    ha-card {
+      /* Aquí ponemos tu imagen de fondo */
+      background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.7)), url('/local/images/logo-cover.png');
+      background-size: cover;
+      background-position: center;
+      height: 180px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-center;
+      #padding-bottom: 15px;
+      padding-top: 25px;
+      border: none;
+    }
+cards:
+  - type: custom:mushroom-chips-card
+    alignment: center
+    chips:
+      - type: template
+        entity: vacuum.dreame_mc1808_4fbf_robot_cleaner
+        icon: mdi:robot-vacuum
+        icon_color: |-
+          {% if is_state(entity, 'cleaning') %} green
+          {% elif is_state(entity, 'returning') %} orange
+          {% else %} white {% endif %}
+        content: |-
+          {% if is_state(entity, 'cleaning') %} Limpiando
+          {% else %} Aspirador {% endif %}
+        tap_action:
+          action: call-service
+          service: script.accion_aspirador
+        card_mod:
+          style: |
+            ha-card {
+              background: rgba(0, 0, 0, 0.0) !important; /* Fondo oscuro para que se lea bien sobre la imagen */
+              backdrop-filter: blur(5px); /* Efecto cristal si la tablet lo soporta */
+              border: none !important;
+              box-shadow: 0px 4px 5px 0px rgba(176, 168, 164,0.66) !important;
+              font-variant: small-caps;
+              --text-color: cyan;
+            }
+      - type: template
+        entity: switch.monitores
+        icon: mdi:monitor
+        icon_color: |-
+          {% if is_state(entity, 'on') %} green
+          {% else %} white {% endif %}
+        content: Monitor
+        tap_action:
+          action: toggle
+        card_mod:
+          style: |
+            ha-card {
+              background: rgba(0, 0, 0, 0.0) !important; /* Fondo oscuro para que se lea bien sobre la imagen */
+              backdrop-filter: blur(5px); /* Efecto cristal si la tablet lo soporta */
+              border: none !important;
+              box-shadow: 0px 4px 5px 0px rgba(176, 168, 164,0.66) !important;
+              font-variant: small-caps;
+              --text-color: cyan;
+            }
+      - type: template
+        icon: mdi:clock-outline
+        content: "Frigo: 2h ok"
+        card_mod:
+          style: |
+            ha-card {
+              background: rgba(0, 0, 0, 0.0) !important; /* Fondo oscuro para que se lea bien sobre la imagen */
+              backdrop-filter: blur(5px); /* Efecto cristal si la tablet lo soporta */
+              border: none !important;
+              box-shadow: 0px 4px 5px 0px rgba(176, 168, 164,0.66) !important;
+              font-variant: small-caps;
+              --text-color: cyan;
+            }
+  - type: custom:mushroom-chips-card
+    alignment: left
+    chips:
+      - type: template
+        entity: null
+        icon: null
+        icon_color: rgba(0, 0, 0, 0.0);
+        card_mod:
+          style: |
+            ha-card {
+              background: rgba(0, 0, 0, 0.0) !important; /* Fondo oscuro para que se lea bien sobre la imagen */
+              border: none !important;
+              --text-color: cyan;
+              box-shadow: 0px 0px 0px 0px rgba(0,0,0,0.0) ! important;
+              
+            }
+  - type: custom:mushroom-chips-card
+    alignment: center
+    chips:
+      - type: entity
+        entity: sensor.interruptor_general_potencia
+        icon: mdi:flash
+        card_mod:
+          style: |
+            ha-card {
+              background: rgba(0, 0, 0, 0.0) !important; /* Fondo oscuro para que se lea bien sobre la imagen */
+              backdrop-filter: blur(5px); /* Efecto cristal si la tablet lo soporta */
+              border: none !important;
+              box-shadow: 0px 4px 5px 0px rgba(176, 168, 164,0.66) !important;
+              font-variant: small-caps;
+              --text-color: cyan;
+              color: red;
+            }
+      - type: entity
+        icon: mdi:fridge
+        entity: sensor.frigorifico_temperature
+        card_mod:
+          style: |
+            ha-card {
+              background: rgba(0, 0, 0, 0.0) !important; /* Fondo oscuro para que se lea bien sobre la imagen */
+              backdrop-filter: blur(5px); /* Efecto cristal si la tablet lo soporta */
+              border: none !important;
+              box-shadow: 0px 4px 5px 0px rgba(176, 168, 164,0.66) !important;
+              font-variant: small-caps;
+              --text-color: cyan;
+              color: {% if is_state('switch.frigorifico', 'on') %} green {% else %} red {% endif %}
+            }
+      - type: template
+        entity: alarm_control_panel.alarma
+        icon: mdi:shield-home-outline
+        icon_color: |-
+          {% if is_state(entity, 'arming') %} red
+          {% elif is_state(entity, 'armed_home') %} orange
+          {% else %} green {% endif %}
+        content: Alarma
+        tap_action:
+          action: toggle
+        card_mod:
+          style: |
+            ha-card {
+              background: rgba(0, 0, 0, 0.0) !important; /* Fondo oscuro para que se lea bien sobre la imagen */
+              backdrop-filter: blur(5px); /* Efecto cristal si la tablet lo soporta */
+              border: none !important;
+              box-shadow: 0px 4px 5px 0px rgba(176, 168, 164,0.66) !important;
+              font-variant: small-caps;
+              --text-color: cyan;
+            }
