@@ -1,12 +1,11 @@
-# sensores_plantillas/meteorologia.yaml
+# templates/meteorologia.yaml
 
 - sensor:
     
     # =================================================================
-    # 1. Clima en Castellano (Traducción y Atributos de OpenWeatherMap)
+    # 1. Clima en Castellano (Traducción y Atributos de weather.xxx)
     # =================================================================
     - name: "Clima en Castellano"
-      # state: >- reemplaza a value_template: >
       state: >
         {% set condition = states('sensor.aemet_condition') %}
         {% if condition == 'clear' %}
@@ -55,26 +54,22 @@
           {% elif direction > 247.5 and direction <= 292.5 %} Oeste
           {% else %} Noroeste
           {% endif %}
-        # NOTA: La visibilidad no tiene un valor definido en tu template, solo la unidad.
-        # Asumo que quieres el valor de la visibilidad más su unidad.
+        
         visibilidad: "{{ state_attr('weather.openweathermap', 'visibility') }} {{ state_attr('weather.openweathermap', 'visibility_unit') }}"
         origen_datos: "{{ state_attr('weather.openweathermap', 'attribution') }}"
         
     # =================================================================
     # 2. Temperatura Media (Cálculo de promedio)
     # =================================================================
-    - name: "Temperatura zona media" # He añadido "media" al nombre para claridad
+    - name: "Temperatura zona media" 
       unique_id: "temperature_zone_average"
       unit_of_measurement: "°C"
       state: >
-        {# NOTA IMPORTANTE: Tu cálculo original estaba dividiendo por 3 en lugar de 2. 
-        Asumiendo que quieres el promedio de dos sensores, dividimos por 2. 
-        Si hay un tercer sensor, ajústalo. #}
         {% set temp_1 = state_attr('weather.gandia', 'temperature') | float(0) %}
         {% set temp_2 = state_attr('weather.gandia_ajuntament', 'temperature') | float(0) %}
         {{ ((temp_1 + temp_2) / 2) | round(1) }}
         
-# ... (Contenido anterior de meteorologia.yaml)
+
 
 # =================================================================
 # 3. Sensación Térmica Calculada
@@ -96,4 +91,4 @@
         {# Aplicación de la fórmula #}
         {{ (temperature + 0.33 * wvp - 0.70 * windspeedmps - 4.00) | round(2) }}
         
-# sensores_plantillas/meteorologia.yaml
+# templates/meteorologia.yaml
