@@ -1,0 +1,49 @@
+# templates/templates_calendarios.yaml
+
+- sensor:
+    
+    # =========================================================
+    # 1. Evento Calendario Familia
+    # =========================================================
+    - name: "Evento Calendario Familia"
+      unique_id: "calendar_family_next_event"
+      icon: mdi:calendar-heart
+      state: >-
+        {% set start_time = states.calendar.familia.attributes.start_time | as_timestamp | float(0) %}
+        {% set end_time = states.calendar.familia.attributes.end_time | as_timestamp | float(0) %}
+        {% set message = states.calendar.familia.attributes.message %}
+        
+        {% if message %}
+          Hay un evento próximo en el calendario de la Familia: "{{ message }}". Empieza 
+          {% if start_time | timestamp_custom('%Y-%m-%d', false) == now().strftime('%Y-%m-%d') %}
+            hoy
+          {% else %}
+            el {{ start_time | timestamp_custom('%A %d de %B', false) 
+              | replace('Monday', 'lunes') | replace('Tuesday', 'martes') 
+              | replace('Wednesday', 'miércoles') | replace('Thursday', 'jueves') 
+              | replace('Friday', 'viernes') | replace('Saturday', 'sábado') 
+              | replace('Sunday', 'domingo') | replace('January', 'enero') 
+              | replace('February', 'febrero') | replace('March', 'marzo') 
+              | replace('April', 'abril') | replace('May', 'mayo') 
+              | replace('June', 'junio') | replace('July', 'julio') 
+              | replace('August', 'agosto') | replace('September', 'septiembre') 
+              | replace('October', 'octubre') | replace('November', 'noviembre') 
+              | replace('December', 'diciembre') }}
+          {% endif %}
+          a las {{ (start_time + 7200) | timestamp_custom('%H:%M', false) 
+            | replace('00:', 'en punto') | replace(':30', ' y media') 
+            | replace(':15', ' y cuarto') | replace(':45', ' menos cuarto') }}
+          y tiene una duración de
+          {% set duracion_horas = (end_time - start_time) // 3600 %}
+          {% set duracion_minutos = ((end_time - start_time) % 3600) // 60 %}
+          {% if duracion_horas == 1 %}
+            1 hora
+          {% elif duracion_horas > 1 %}
+            {{ duracion_horas }} horas
+          {% endif %}
+          {% if duracion_minutos > 0 %}
+            {% if duracion_horas > 0 %} y {% endif %}{{ duracion_minutos }} minutos
+          {% endif %}
+        {% else %}
+          No tienes ningún evento registrado en la Familia
+        {% endif %}
