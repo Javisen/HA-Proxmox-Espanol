@@ -1,0 +1,52 @@
+# templates/contadores.yaml
+
+- sensor:
+    # Contar luces
+    - name: "Contador Luces"
+      icon: mdi:lightbulb-group
+      state: "{{ states.light | list | length }}"
+      
+    # Contar automatizaciones
+    - name: "Contador Automatizaciones"
+      icon: mdi:robot-happy
+      state: "{{ states.automation | list | length }}"
+      
+    # Contar Scripts
+    - name: "Contador Scripts"
+      icon: mdi:script-text-outline
+      state: "{{ states.script | list | length }}"
+      
+    # Contar Rastreadores de dispositivos
+    - name: "Contador Rastreadores Dispositivos"
+      icon: mdi:account-multiple
+      state: "{{ states.device_tracker | list | length }}"
+      
+    # Contar sensores binarios
+    - name: "Contador Sensores Binarios"
+      icon: mdi:numeric-5-box-multiple-outline
+      state: "{{ states.binary_sensor | list | length }}"
+      
+    # Contar Sensores
+    - name: "Contador Sensores"
+      icon: mdi:gauge
+      state: "{{ states.sensor | list | length }}"
+      
+    # Contar interruptores
+    - name: "Contador Interruptores"
+      icon: mdi:toggle-switch-outline
+      state: "{{ states.switch | list | length }}"
+      
+    # Contar Zonas
+    - name: "Contador Zonas"
+      icon: mdi:map-marker-radius"
+      state: "{{ states.zone | list | length }}"
+      
+    # Contar Input Booleans
+    - name: "Contador Input Booleans"
+      icon: mdi:toggle-switch-off-outline
+      state: "{{ states.input_boolean | list | length }}"
+      
+    # Contar Input Numbers
+    - name: "Contador Input Numbers"
+      icon: mdi:numeric-box-multiple-outline
+      state: "{{ states.input_number | list | length }}"
