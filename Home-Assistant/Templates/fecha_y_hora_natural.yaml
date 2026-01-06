@@ -1,0 +1,91 @@
+- sensor:
+
+    - name: "Día de la Semana"
+      icon: mdi:calendar
+      state: >
+        {{ ['Lunes','Martes','Miercoles','Jueves','Viernes','Sabado','Domingo'][now().weekday()] }}
+
+    - name: "Día del mes"
+      icon: mdi:calendar-today
+      state: >
+        {{ now().day | string }}
+
+    - name: "Mes"
+      icon: mdi:calendar-month
+      state: >
+        {{ ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'][now().month-1] }}
+
+    - name: "Último Día del Mes"
+      unique_id: "last_day_of_month"
+      icon: mdi:calendar-end
+      state: >
+        {# NOTA: Usamos el filtro 'calendar.month_days' para simplificar la lógica del año bisiesto #}
+        {% set month = now().month %}
+        {% set year = now().year %}
+        
+        {# La función 'days_in_month' de Home Assistant lo hace más limpio #}
+        {{ now().days_in_month }}
+
+    - name: "Hora Natural"
+      icon: mdi:clock-time-four-outline
+      state: >
+        {% set current_time = now() %}
+        {% set hour = current_time.hour %}
+        {% set minute = current_time.minute %}
+
+        {# Determinar la hora equivalente en formato 12h #}
+        {% set hour_12 = hour if 0 < hour <= 12 else (hour - 12) if hour > 12 else 12 %}
+
+        {# Determinar el período del día #}
+        {% set period = 'de la mañana' %}
+        {% if 12 <= hour < 20 %}
+          {% set period = 'de la tarde' %}
+        {% elif hour >= 20 or hour == 0 %}
+          {% set period = 'de la noche' %}
+        {% endif %}
+
+        {# Construir la cadena de tiempo en lenguaje natural #}
+        {% if minute == 0 %}
+          {% if hour_12 == 1 %}
+            Es la una en punto {{ period }}.
+          {% else %}
+            Son las {{ hour_12 | int }} en punto {{ period }}.
+          {% endif %}
+        {% elif minute == 15 %}
+          {% if hour_12 == 1 %}
+            Es la una y cuarto {{ period }}.
+          {% else %}
+            Son las {{ hour_12 | int }} y cuarto {{ period }}.
+          {% endif %}
+        {% elif minute == 30 %}
+          {% if hour_12 == 1 %}
+            Es la una y media {{ period }}.
+          {% else %}
+            Son las {{ hour_12 | int }} y media {{ period }}.
+          {% endif %}
+        {% elif minute == 45 %}
+          {% set next_hour_12 = (hour_12 % 12 + 1) %}
+          {% set next_period = period %}
+          {% if hour == 11 and minute == 45 %}
+            {% set next_period = 'de la tarde' %}
+          {% elif hour == 19 and minute == 45 %}
+            {% set next_period = 'de la noche' %}
+          {% elif hour == 23 and minute == 45 %}
+            {% set next_period = 'de la mañana' %}
+          {% endif %}
+          
+          {% if next_hour_12 == 1 %}
+            Es la una menos cuarto {{ next_period }}.
+          {% else %}
+            Son las {{ next_hour_12 | int }} menos cuarto {{ next_period }}.
+          {% endif %}
+        {% else %}
+          {# Formato genérico para minutos que no son 0, 15, 30, 45 #}
+          {% if hour_12 == 1 %}
+            Es la una y {{ minute | int }} {{ period }}.
+          {% else %}
+            Son las {{ hour_12 | int }} y {{ minute | int }} {{ period }}.
+          {% endif %}
+        {% endif %}
+        
+        
