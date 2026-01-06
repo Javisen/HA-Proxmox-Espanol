@@ -1,0 +1,239 @@
+type: horizontal-stack
+cards:
+  - type: clock
+    clock_style: digital
+    clock_size: medium
+    show_seconds: false
+    no_background: false
+    face_style: markers
+    card-mod:
+      style: |
+        ha-card {
+          background: rgba(0, 0, 0, 0.0) !important;
+          square: 15px;
+          box-shadow: 0px 2px 4px 0px rgba(100, 100, 200, 0.66);
+          padding: 15px;
+        }
+  - type: custom:stack-in-card
+    cards:
+      - type: conditional
+        conditions:
+          - entity: binary_sensor.valencia
+            state: "on"
+        card:
+          type: custom:meteoalarm-card
+          entities:
+            - entity: binary_sensor.valencia
+          integration: meteoalarm
+          hide_when_no_warning: true
+          override_headline: true
+          scaling_mode: disabled
+          card_mod:
+            style:
+              mushroom-shape-icon$: |
+                .shape {
+                  display: none !important;
+                }
+      - type: conditional
+        conditions:
+          - entity: binary_sensor.valencia
+            state: "off"
+        card:
+          type: custom:stack-in-card
+          card_mod:
+            style: |
+              ha-card {
+                --primary-text-color: #ffffff;
+                --secondary-text-color: #ffffff;
+              {% if states('sun.sun') == "below_horizon" %}
+                background: linear-gradient( rgba(13, 55, 113, 0.3), rgba(15, 33, 70, 0.4) ), url('/local/clima/noche3.png');
+                background-position: center;
+                background-size: cover;          
+              {% else %}
+                {% set condition = states('sensor.aemet_condition') %}
+                {% if condition =="clear-night"%}
+                background: linear-gradient( rgba(13, 55, 113, 0.4), rgba(15, 33, 70, 0.4) ), url('/local/clima/amanecer.png');
+                background-position: center;
+                background-size: cover; 
+                {% elif condition =="exceptional" or condition =="sunny" or condition =="windy"
+                or condition =="partlycloudy" %}
+                background: linear-gradient(rgba(29,156,199,0.6), rgba(29,156,199,0.2)), url('/local/clima/soleado3.png');
+                background-position: center;
+                background-size: cover;        
+                {% elif condition =="hail" or condition =="snowy" or condition =="snowy-rainy"
+                %} background: #ffffff!important;
+                {% elif condition =="lightning" or condition =="lightning-rainy" or condition =="pouring" or condition
+                =="rainy" %}
+                background: linear-gradient(rgba(88,111,119,0.8), rgba(88,111,119,0.8)), url('/local/clima/lloviendo.png');
+                background-position: center;
+                background-size: cover;          
+                {% else %}
+                background: linear-gradient(rgba(121,146,155,0.2), rgba(121,146,155,0.2)), url('/local/clima/nublado.png');
+                background-position: center;
+                background-size: cover;          
+                {% endif %}
+              {% endif %} }
+          cards:
+            - type: custom:mushroom-template-card
+              primary: |
+                {{ states('sensor.openweathermap_weather') | capitalize}} 
+              layout: vertical
+              icon: >-
+                {% set condition = states('sensor.openweathermap_condition') %}
+                {% if condition =="clear-night" %} mdi:weather-night {% elif
+                condition =="exceptional" %} mdi:weather-sunny {% elif condition
+                =="partlycloudy" %} mdi:weather-partly-cloudy {% else %}
+                mdi:weather-{{ condition }} {% endif %}
+              tap_action:
+                action: navigate
+                navigation_path: meteo
+              icon_color: |-
+                {% if states('sun.sun') == "below_horizon" %}
+                 #ffffff
+                {% else %}
+                  {% set condition = states('sensor.openweathermap_condition') %}
+                  {% if condition =="clear-night" or condition =="lightning" or condition=="lightning-rainy" %}
+                   #ebe584
+                  {% elif condition =="exceptional" or condition =="sunny" or condition =="partlycloudy" %}
+                   #e4ff00
+                  {% elif condition =="windy" %}
+                   #ffffff
+                  {% elif condition =="hail" or condition =="snowy" or condition =="snowy-rainy" %}
+                   #2b2b2b
+                  {% elif condition =="lightning" or condition =="snowy" or condition =="snowy-rainy" %}
+                   #2b2b2b
+                  {% elif condition =="pouring" or condition =="rainy" %}
+                   #84e7eb 
+                  {% else %}
+                   #e5e5e5
+                  {% endif %} 
+                {% endif %}
+              card_mod:
+                style: |
+                  ha-card {
+                    border: 0px;
+                    --icon-symbol-size: 30px;
+                  }
+            - type: custom:mushroom-chips-card
+              alignment: center
+              card_mod:
+                style: |
+                  ha-card {
+                    margin-top: -17px;
+                    --chip-spacing: 0px !important;
+                    --chip-padding: 5px !important;
+                  }
+              chips:
+                - type: template
+                  tap_action:
+                    action: navigate
+                    navigation_path: tiempo
+                  icon: mdi:thermometer
+                  content: "{{ states('sensor.openweathermap_temperature') |int}}ºC"
+                  card_mod:
+                    style: |
+                      ha-card {
+                        border: 0px;
+                        background: transparent!important;
+                        box-shadow: none!important;
+                        height: 33px!important;
+                        --chip-icon-size: 25px;
+                        font-size: 45px !important;
+                      }
+                - type: template
+                  tap_action:
+                    action: navigate
+                    navigation_path: tiempo
+                  icon: mdi:umbrella
+                  content: >-
+                    {{
+                    states('sensor.aemet_daily_forecast_precipitation_probability')
+                    }}%
+                  card_mod:
+                    style: |
+                      ha-card {
+                        border: 0px;
+                        background: transparent!important;
+                        box-shadow: none!important;
+                        height: 33px!important;
+                        --chip-icon-size: 25px;
+                        font-size: 45px !important;
+                      }
+                - type: template
+                  tap_action:
+                    action: navigate
+                    navigation_path: tiempo
+                  icon: >-
+                    {% if is_state('binary_sensor.sensor_de_lluvia_water_leak',
+                    'on') %}
+                      mdi:weather-pouring
+                    {% else %}
+                      mdi:weather-sunny
+                    {% endif %}
+                  content: >-
+                    {% if is_state('binary_sensor.sensor_de_lluvia_water_leak',
+                    'on') %}
+                     Llueve
+                    {% else %}
+                     Seco
+                    {% endif %}
+                  card_mod:
+                    style: |
+                      ha-card {
+                        border: 0px;
+                        background: transparent!important;
+                        box-shadow: none!important;
+                        height: 33px!important;
+                        --chip-icon-size: 29px;
+                        font-size: 45px !important;
+                      }
+            - type: custom:mushroom-template-card
+              primary: ""
+              secondary: ""
+              icon: |
+                {% if states('sun.sun') == "below_horizon" %}
+                phu:scene-nightlight
+                {% elif states('sun.sun') == "above_horizon" %}
+                mdi:white-balance-sunny
+                {% endif %}    
+              tap_action:
+                action: navigate
+                navigation_path: tiempo
+              icon_color: |
+                {% if states('sun.sun') == "below_horizon" %}
+                 amber
+                {% elif states('sun.sun') == "above_horizon" %}
+                 yellow
+                {% endif %}    
+              card_mod:
+                style: |
+                  ha-card {
+                    border: 0px;
+                    margin-top: -185px;
+                    margin-bottom: -20px;
+                    margin-left: -180px;
+                    --icon-size: 134px;
+                    opacity: 0.5;
+                    background: transparent !important;
+                  }
+                  {% if states('sun.sun') == "below_horizon" %}
+                  ha-state-icon {
+                    animation: beat 3.3s ease-out infinite both;
+                    transform-origin: 70% 60%;
+                  }
+                  @keyframes beat {
+                    0% { transform: scale(1); }
+                    10% { transform: scale(1.05); }
+                    17% { transform: scale(1); }
+                    33% { transform: scale(1.05); }
+                    60% { transform: scale(1); }
+                  }
+                  {% elif states('sun.sun') == "above_horizon" %}
+                  ha-state-icon {
+                    animation: spin 20s linear infinite;
+                  }
+                  {% endif %}    
+                  mushroom-shape-icon {
+                    --shape-color: none !important;
+                    --icon-color: amber !important;
+                  }
