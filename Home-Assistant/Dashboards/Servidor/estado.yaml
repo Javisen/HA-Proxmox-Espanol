@@ -1,0 +1,87 @@
+type: vertical-stack
+cards:
+  - type: horizontal-stack
+    cards:
+      - type: custom:custom-gauge-card
+        entity: sensor.proxmox_temperatura_de_composite
+        name: Temp. CPU
+        unit: °C
+        min: 0
+        max: 60
+        gauge_size: 85
+        center_size: 75
+        led_size: 3
+        leds_count: 50
+        decimals: 0
+        theme: custom
+        custom_background: "#000000"
+        custom_gauge_background: "radial-gradient(circle, #444, #222)"
+        custom_center_background: "radial-gradient(circle, #333, #111)"
+        custom_text_color: "#ffffff"
+        transparent_card_background: true
+      - type: custom:custom-gauge-card
+        entity: sensor.proxmox_uso_de_memoria
+        name: Uso RAM
+        unit: "%"
+        min: 0
+        max: 100
+        gauge_size: 85
+        center_size: 75
+        led_size: 3
+        leds_count: 50
+        decimals: 0
+        theme: custom
+        custom_background: "#000000"
+        custom_gauge_background: "radial-gradient(circle, #444, #222)"
+        custom_center_background: "radial-gradient(circle, #333, #111)"
+        custom_text_color: "#ffffff"
+        transparent_card_background: true
+        transparent_gauge_background: true
+        transparent_center_background: true
+        hide_inactive_leds: true
+  - type: custom:bar-card
+    title: Almacenamiento
+    card_mod:
+      style: |
+        ha-card {
+          background: black !important;
+        }
+    entities:
+      - entity: sensor.proxmox_uso_de_disco_de
+        name: Disco Sistema
+        icon: mdi:harddisk
+      - entity: sensor.proxmox_uso_de_disco_de_mnt_backups
+        name: Backups
+        icon: mdi:harddisk-plus
+      - entity: sensor.proxmox_uso_de_disco_de_media_externo_250
+        name: Datos
+        icon: mdi:database
+      - entity: sensor.proxmox_uso_de_disco_de_media_musica
+        name: Música
+        icon: mdi:music-circle
+      - entity: sensor.proxmox_uso_de_disco_de_media_peliculas
+        name: Películas
+        icon: mdi:movie-open
+      - entity: sensor.proxmox_uso_de_disco_de_media_series
+        name: Series (1)
+        icon: mdi:television-box
+      - entity: sensor.proxmox_uso_de_disco_de_media_series_2
+        name: Series (2)
+        icon: mdi:television-box
+    columns: 1
+    direction: right
+    height: 30px
+    width: 95%
+    indicator: auto
+    decimal: 1
+    unit_of_measurement: "%"
+    severity:
+      - color: Green
+        from: 0
+        to: 50
+      - color: Orange
+        from: 50
+        to: 80
+      - color: Red
+        from: 80
+        to: 100
