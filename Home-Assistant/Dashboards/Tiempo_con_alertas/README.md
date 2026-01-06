@@ -1,9 +1,9 @@
 # 🏠 Home Assistant Dashboard - Clima & Alertas Dinámicas
 
-Este repositorio contiene la configuración avanzada para el panel de control meteorológico y el sistema de gestión de presencia visual. El diseño está optimizado para su visualización desde el puesto de trabajo (**Lenovo Ideacentre**) mientras el servidor corre en **Proxmox**.
+Este repositorio contiene la configuración avanzada para el panel de control meteorológico y el sistema de avisos de seguridad. El diseño está optimizado para su visualización desde el puesto de trabajo (**Lenovo Ideacentre**) mientras el servidor corre en **Proxmox**.
 
 ## 📸 Vistas Previas
-| Estado de Alerta Activa | Estado de Clima Normal |
+| Estado de Alerta Activa (Fijo) | Estado de Clima Normal |
 | :---: | :---: |
 | ![Alertas](alertas.png) | ![Clima Dinámico](alertas2.png) |
 
@@ -13,39 +13,29 @@ Este repositorio contiene la configuración avanzada para el panel de control me
 
 ### Dependencias HACS (Obligatorias)
 Para que la interfaz funcione correctamente, debes instalar:
-* [Mushroom Cards](https://github.com/piitaya/lovelace-mushroom)
-* [Stack-in-card](https://github.com/custom-cards/stack-in-card)
-* [Card-mod](https://github.com/thomasloven/lovelace-card-mod)
-* [Meteoalarm Card](https://github.com/MrInternal/meteoalarm-card)
+* [Mushroom Cards](https://github.com/piitaya/lovelace-mushroom) - Para los chips y elementos de plantilla.
+* [Stack-in-card](https://github.com/custom-cards/stack-in-card) - Para agrupar los elementos en un solo bloque visual.
+* [Card-mod](https://github.com/thomasloven/lovelace-card-mod) - Para los fondos dinámicos y animaciones CSS.
+* [Meteoalarm Card](https://github.com/MrInternal/meteoalarm-card) - Para la integración de avisos oficiales.
 
 ### Recursos Multimedia
-Asegúrate de que las imágenes estén en la ruta `/local/clima/` (que corresponde a la carpeta física `/config/www/clima/`):
+Las imágenes deben estar alojadas en la carpeta `/config/www/clima/` (accesibles vía `/local/clima/`):
 * `noche3.png`, `amanecer.png`, `soleado3.png`, `lloviendo.png`, `nublado.png`.
 
 ---
 
-## 🕒 Gestión de Inactividad (Temporizador)
+## ⛈️ Comportamiento de la Tarjeta
 
-Para mantener el dashboard limpio y evitar distracciones visuales en tu Lenovo de trabajo, el panel de controles activos se oculta tras un periodo de inactividad.
+La tarjeta utiliza lógica condicional de Home Assistant para alternar entre dos estados visuales:
 
-### 1. Crear el Helper
-Ve a **Ajustes > Dispositivos y Servicios > Ayudantes** y crea un temporizador:
-* **Entidad:** `timer.temporizador_pantalla`
-* **Duración predeterminada:** `00:05:00` (5 minutos)
+### 1. Modo Alerta (Prioritario)
+Cuando el sensor meteorológico de Valencia (`binary_sensor.valencia`) pasa a estado **ON**, la tarjeta de clima convencional se oculta y se muestra de forma **fija** la tarjeta de **Meteoalarm**. 
+* Este estado persiste ininterrumpidamente mientras la alerta esté vigente, asegurando que el aviso de seguridad sea lo primero que veas al consultar el dashboard desde tu PC de trabajo.
 
-### 2. Automatización de Ocultación (YAML)
-Añade esto a tu archivo `automations.yaml` o mediante el editor visual:
+### 2. Modo Clima Dinámico
+Cuando no hay alertas activas, la tarjeta presenta un diseño visual enriquecido:
+* **Fondos según condición:** Cambia la imagen de fondo automáticamente mediante CSS `linear-gradient` basándose en la entidad `sensor.aemet_condition`.
+* **Ciclo Solar:** * **Día:** Fondo iluminado y animación de rotación continua (`spin`) en el icono del sol.
+    * **Noche:** Fondo oscuro y animación de pulsación (`beat`) en el icono de la luna.
+* **Datos Integrados:** Muestra temperatura (OpenWeatherMap), probabilidad de precipitación (AEMET) y el estado real del sensor de inundación físico de la vivienda.
 
-```yaml
-alias: "Dashboard: Ocultar controles por inactividad"
-description: "Apaga los controles si no hay interacción"
-trigger:
-  - platform: event
-    event_type: timer.finished
-    event_data:
-      entity_id: timer.temporizador_pantalla
-action:
-  - service: input_boolean.turn_off
-    target:
-      entity_id: input_boolean.mostrar_controles_estancia
-mode: restart
