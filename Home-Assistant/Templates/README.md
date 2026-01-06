@@ -22,11 +22,20 @@ En esta sección se encuentran los archivos de configuración que definen sensor
 * **Seguimiento Solar**: Monitorización del ángulo de elevación del sol y estado relativo al horizonte (arriba/abajo).
 * **Binario Día/Noche**: Sensor simplificado para condicionar automatizaciones de iluminación exterior basadas en el amanecer y atardecer.
 
-## 🛠️ Instalación
-Para utilizar estos archivos, asegúrate de tenerlos referenciados en tu `configuration.yaml` mediante la etiqueta `template`:
+## 🛠️ Instalación y Organización
+
+Para que Home Assistant cargue estos archivos, debes añadirlos a tu `configuration.yaml`. Tienes dos formas de hacerlo dependiendo de cómo prefieras organizar tu servidor
+
+### Opción A: Carga automática de toda la carpeta (Recomendado)
+Esta opción es la más limpia. Home Assistant fusionará todos los archivos `.yaml` que encuentre dentro de la carpeta `templates`.
 
 ```yaml
+template: !include_dir_merge_list templates
+
+### Opción B:Si prefieres tener un control manual estricto sobre qué archivos se cargan y en qué orden:
 template:
   - !include templates/meteorologia.yaml
   - !include templates/contadores.yaml
-  # ... resto de archivos
+  - !include templates/saludos_aleatorios.yaml
+  # ... añadir manualmente cada nuevo archivo
+
