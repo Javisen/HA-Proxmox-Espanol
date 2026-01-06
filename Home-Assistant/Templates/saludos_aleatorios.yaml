@@ -1,0 +1,34 @@
+# templates/saludos_aleatorios.yaml
+
+- sensor:
+    - name: "Saludo del Día"
+      unique_id: "random_greeting_time"
+      icon: mdi:hand-wave
+      state: >-
+        {% set hour = now().hour %}
+        
+        {# Saludos de Mañana (Antes de las 14:00) #}
+        {%- if hour < 14 -%}
+          {% set greetings = [
+            "Buenos días", "Bon día", "Bonjour", "Es un nuevo día", "Hola", 
+            "Cómo va?", "Saludos", "Qué bueno verte", "Bienvenido de nuevo", 
+            "Te ves bien hoy", "Feliz día" 
+          ] %}
+          {{ greetings | random }}
+          
+        {# Saludos de Tarde (Entre las 14:00 y antes de las 20:00) #}
+        {%- elif hour < 20 -%}
+          {% set greetings = [
+            "Bona vesprada", "Buenas tardes", "Hola", "Saludos", "Me alegro de verte", 
+            "Bienvenido de nuevo", "Te ves bien hoy", "Feliz día"
+          ] %}
+          {{ greetings | random }}
+          
+        {# Saludos de Noche (20:00 en adelante) #}
+        {%- else -%}
+          {% set greetings = [
+            "Bona nit", "Buenas noches", "Bonsoir", "Hola", "Saludos", 
+            "Bienvenido de nuevo", "Te ves bien hoy", "Feliz día" 
+          ] %}
+          {{ greetings | random }}
+        {%- endif -%}
