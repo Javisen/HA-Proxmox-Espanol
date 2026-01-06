@@ -1,0 +1,22 @@
+- sensor:
+    - name: "Luces Encendidas"
+      unique_id: "count_active_lights"
+      icon: mdi:lightbulb-on
+      unit_of_measurement: "luces"
+      state: >
+        {{ expand('group.luces') 
+          | selectattr('state','eq','on')
+          | list
+          | count
+        }}
+
+    - name: "Luces Pasillo Encendidas" 
+      unique_id: "count_active_hallway_lights"
+      icon: mdi:ceiling-light
+      unit_of_measurement: "luces"
+      state: >
+        {{ expand('group.pasillo')
+          | selectattr('state','eq','on')
+          | list
+          | count
+        }}
