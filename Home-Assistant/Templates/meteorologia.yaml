@@ -1,0 +1,99 @@
+# sensores_plantillas/meteorologia.yaml
+
+- sensor:
+    
+    # =================================================================
+    # 1. Clima en Castellano (Traducción y Atributos de OpenWeatherMap)
+    # =================================================================
+    - name: "Clima en Castellano"
+      # state: >- reemplaza a value_template: >
+      state: >
+        {% set condition = states('sensor.aemet_condition') %}
+        {% if condition == 'clear' %}
+          Despejado
+        {% elif condition == 'cloudy' %}
+          Nublado
+        {% elif condition == 'partlycloudy' %}
+          Parcialmente nublado
+        {% elif condition == 'rainy' %}
+          Lluvia
+        {% elif condition == 'pouring' %}
+          Lluvia Torrencial
+        {% elif condition == 'snow' %}
+          Nieve
+        {% elif condition == 'fog' %}
+          Niebla 🌫️
+        {% elif condition == 'storm' %}
+          Tormenta
+        {% elif condition == 'windy' %}
+          Ventoso
+        {% elif condition == 'sunny' %}
+          Soleado
+        {% elif condition == 'clear-night' %}
+          Noche Despejada
+        {% else %}
+          Condición desconocida
+        {% endif %}
+        
+      # attributes: reemplaza a attribute_templates:
+      attributes:
+        temperatura: "{{ state_attr('weather.openweathermap', 'temperature') | round(1) }}°"
+        sensación_térmica: "{{ state_attr('weather.openweathermap', 'apparent_temperature') | round(1) }}°"
+        humedad: "{{ state_attr('weather.openweathermap', 'humidity') }} %"
+        nubosidad: "{{ state_attr('weather.openweathermap', 'cloud_coverage') }} %"
+        presión: "{{ state_attr('weather.openweathermap', 'pressure') }} {{ state_attr('weather.openweathermap', 'pressure_unit') }}"
+        velocidad_viento: "{{ state_attr('weather.openweathermap', 'wind_speed') | round(1) }} {{ state_attr('weather.openweathermap', 'wind_speed_unit') }}"
+        ráfaga_viento: "{{ state_attr('weather.openweathermap', 'wind_gust_speed') | round(1) }} {{ state_attr('weather.openweathermap', 'wind_speed_unit') }}"
+        dirección_viento: >
+          {% set direction = state_attr('weather.openweathermap', 'wind_bearing') | float(0) %}
+          {% if direction <= 22.5 or direction > 337.5 %} Norte
+          {% elif direction > 22.5 and direction <= 67.5 %} Noreste
+          {% elif direction > 67.5 and direction <= 112.5 %} Este
+          {% elif direction > 112.5 and direction <= 157.5 %} Sureste
+          {% elif direction > 157.5 and direction <= 202.5 %} Sur
+          {% elif direction > 202.5 and direction <= 247.5 %} Suroeste
+          {% elif direction > 247.5 and direction <= 292.5 %} Oeste
+          {% else %} Noroeste
+          {% endif %}
+        # NOTA: La visibilidad no tiene un valor definido en tu template, solo la unidad.
+        # Asumo que quieres el valor de la visibilidad más su unidad.
+        visibilidad: "{{ state_attr('weather.openweathermap', 'visibility') }} {{ state_attr('weather.openweathermap', 'visibility_unit') }}"
+        origen_datos: "{{ state_attr('weather.openweathermap', 'attribution') }}"
+        
+    # =================================================================
+    # 2. Temperatura Media (Cálculo de promedio)
+    # =================================================================
+    - name: "Temperatura zona media" # He añadido "media" al nombre para claridad
+      unique_id: "temperature_zone_average"
+      unit_of_measurement: "°C"
+      state: >
+        {# NOTA IMPORTANTE: Tu cálculo original estaba dividiendo por 3 en lugar de 2. 
+        Asumiendo que quieres el promedio de dos sensores, dividimos por 2. 
+        Si hay un tercer sensor, ajústalo. #}
+        {% set temp_1 = state_attr('weather.gandia', 'temperature') | float(0) %}
+        {% set temp_2 = state_attr('weather.gandia_ajuntament', 'temperature') | float(0) %}
+        {{ ((temp_1 + temp_2) / 2) | round(1) }}
+        
+# ... (Contenido anterior de meteorologia.yaml)
+
+# =================================================================
+# 3. Sensación Térmica Calculada
+# =================================================================
+    - name: "Sensación Térmica"
+      unique_id: "calculated_thermal_sensation"
+      icon: mdi:temperature-minus
+      unit_of_measurement: '°C'
+      state: >
+        {# Fórmula de 'temperatura aparente' o sensación térmica (índice de calor y frío) #}
+        {% set temperature = state_attr('weather.gandia_ajuntament', 'temperature') | float(0) %}
+        {% set humidity = state_attr('weather.gandia_ajuntament', 'humidity') | float(0) %}
+        {# Convertir km/h a m/s (dividir por 3.6) #}
+        {% set windspeedmps = state_attr('weather.gandia_ajuntament', 'wind_speed') | float(0) / 3.6 %}
+        
+        {# Cálculo de la Presión de Vapor de Agua (wvp) #}
+        {% set wvp = (humidity/100) * 6.105 * e**((17.27*temperature) / (237.7 + temperature)) %}
+        
+        {# Aplicación de la fórmula #}
+        {{ (temperature + 0.33 * wvp - 0.70 * windspeedmps - 4.00) | round(2) }}
+        
+# sensores_plantillas/meteorologia.yaml
