@@ -28,8 +28,6 @@ Para que Home Assistant cargue estos archivos, debes añadirlos a tu `configurat
 
 ### Opción A: Carga automática de toda la carpeta (Recomendado)
 Esta opción es la más limpia. Home Assistant fusionará todos los archivos `.yaml` que encuentre dentro de la carpeta `templates`.
-
-```yaml
 template: !include_dir_merge_list templates
 
 ### Opción B:Si prefieres tener un control manual estricto sobre qué archivos se cargan y en qué orden:
