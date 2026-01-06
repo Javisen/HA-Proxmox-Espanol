@@ -3,7 +3,7 @@
 Este módulo de interfaz permite gestionar de forma inteligente las diferentes estancias de la casa (Entrada, Cocina, Salón) mediante un sistema de condiciones. La tarjeta adapta su contenido y visibilidad basándose en la selección del usuario y el estado de actividad.
 
 ## 🖼️ Capturas de Pantalla
-| Estado: Controles Activos | Estado: Modo Espera |
+| Estado: Modo Espera | Estado: Controles Activos | 
 | :---: | :---: |
 | ![Controles](./deslizante1.png) | ![Espera](./deslizante2.png) |
 
