@@ -1,0 +1,39 @@
+# templates/dia_y_noche.yaml
+
+- sensor:
+
+    - name: "Ángulo del sol"
+      unique_id: "sun_elevation_angle"
+      unit_of_measurement: '°'
+      state: "{{ state_attr('sun.sun', 'elevation') }}"
+
+    - name: "Próximo amanecer" 
+      unique_id: "sun_next_rising"
+      device_class: timestamp
+      state: "{{ state_attr('sun.sun', 'next_rising') }}"
+        
+
+    - name: "Estado del sol"
+      unique_id: "sun_state_es"
+      state: >-
+        {% if is_state('sun.sun', 'above_horizon') %}
+          arriba
+        {% else %}
+          abajo
+        {% endif %}
+        
+
+    - name: "Day/Night"
+      unique_id: "sun_day_night"
+      state: >-
+        {% if is_state('sun.sun', 'above_horizon') %}
+          Day
+        {% else %}
+          Night
+        {% endif %}
+      icon: >-
+        {% if is_state('sun.sun', 'above_horizon') %}
+          mdi:weather-sunny
+        {% else %}
+          mdi:weather-night
+        {% endif %}
