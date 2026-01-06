@@ -1,6 +1,6 @@
 # 🏠 Home Assistant Dashboard - Clima & Alertas Dinámicas
 
-Este repositorio contiene la configuración avanzada para el panel de control meteorológico y el sistema de avisos de seguridad. El diseño está optimizado para su visualización desde el puesto de trabajo (**Lenovo Ideacentre**) mientras el servidor corre en **Proxmox**.
+Este repositorio contiene la configuración avanzada para el panel de control meteorológico y el sistema de avisos de seguridad. El diseño está optimizado para su visualización desde el puesto de trabajo.
 
 ## 📸 Vistas Previas
 | Estado de Alerta Activa (Fijo) | Estado de Clima Normal |
