@@ -1,0 +1,57 @@
+- trigger:
+    # Actualiza la previsión cada hora (AEMET no actualiza tan rápido, pero es seguro)
+    - platform: time_pattern
+      hours: /1
+    # Se asegura de actualizar al iniciar Home Assistant
+    - platform: homeassistant
+      event: start
+  action:
+    # Llama al servicio para obtener la previsión DIARIA de AEMET
+    - action: weather.get_forecasts
+      data:
+        type: daily
+      target:
+        entity_id: weather.aemet # <--- Tu entidad de AEMET
+      response_variable: aemet_daily # <-- Almacenamos la previsión aquí
+      
+  sensor:
+    # Sensor principal que almacena toda la lista de previsión en un atributo
+    - name: AEMET Forecast, Diario
+      unique_id: aemet_forecast_diario
+      state: "{{ now().isoformat() }}" # El estado es solo la marca de tiempo de la última actualización
+      attributes:
+        # Aquí almacenamos la lista completa de la previsión de AEMET
+        forecast: "{{ aemet_daily['weather.aemet'].forecast }}"
+# Bloque de extracción que lee del sensor de atributo creado arriba
+- sensor:
+    # Definimos la variable 'manana' a partir del atributo del sensor que creamos
+    - variables:
+        # Accede a la lista de previsión y selecciona el índice [1] (Mañana)
+        manana: "{{ state_attr('sensor.aemet_forecast_diario', 'forecast')[1] }}"
+        
+    # 1. ☁️ Condición del Tiempo Mañana
+    - name: "AEMET Condición Mañana"
+      unique_id: "aemet_condition_day1"
+      state: "{{ manana.condition | replace('_', ' ') | capitalize }}"
+      icon: mdi:weather-cloudy
+      
+    # 2. ⬆️ Temperatura Máxima Mañana
+    - name: "AEMET Temperatura Máx Mañana"
+      unique_id: "aemet_temp_max_day1"
+      unit_of_measurement: "°C"
+      device_class: temperature
+      state: "{{ manana.temperature | round(1) }}" 
+
+    # 3. ⬇️ Temperatura Mínima Mañana
+    - name: "AEMET Temperatura Mín Mañana"
+      unique_id: "aemet_temp_min_day1"
+      unit_of_measurement: "°C"
+      device_class: temperature
+      state: "{{ manana.templow | round(1) }}" 
+          
+    # 4. 🌧️ Probabilidad de Precipitación Mañana
+    - name: "AEMET Probabilidad Lluvia Mañana"
+      unique_id: "aemet_precip_prob_day1"
+      unit_of_measurement: "%"
+      device_class: humidity
+      state: "{{ manana.precipitation_probability | round(0) }}"
