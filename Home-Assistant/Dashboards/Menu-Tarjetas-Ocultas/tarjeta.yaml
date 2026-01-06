@@ -1,0 +1,1269 @@
+type: vertical-stack
+cards:
+  - type: conditional
+    conditions:
+      - entity: input_select.estancia_seleccionada
+        state: entrada
+    card:
+      type: vertical-stack
+      cards:
+        - type: conditional
+          conditions:
+            - entity: input_boolean.mostrar_controles_estancia
+              state: "off"
+          card:
+            type: custom:stack-in-card
+            card_mod:
+              style: |
+                ha-card {
+                  background: rgba(0, 0, 0, 0.0);
+                  border-radius: 15px;
+                  height: 300px; /* IMPORTANTE: Misma altura que la vista ON */
+                  display: flex;
+                  overflow-y: auto;
+                  align-items: flex-start;
+                  justify-content: center;
+                  padding: 10px;
+                }
+            cards:
+              - type: markdown
+                content: >
+                  ### 💡 Luces
+
+                  | Total | Encendidas | No disponibles |
+
+                  |:-----:|:----------:|:--------------:|
+
+                  | {{ expand('group.luces') | count }} | {{
+                  expand('group.luces') | selectattr('state','eq','on') | list |
+                  count }} | {{ expand('group.luces') |
+                  selectattr('state','eq','unavailable') | list | count }} |
+
+                  ### 🌡️ Temperaturas
+
+                  | Estancia     | °C                        | Estancia     |
+                  °C                        |
+
+                  |:------------:|:------------------------:|:------------:|:------------------------:|
+
+                  | Salón        | {{ states('sensor.salon_temperature') }} |
+                  Cocina       | {{ states('sensor.cocina_temperature') }} |
+
+                  | Dormitorio   | {{ states('sensor.dormitorio_temperature') }}
+                  | Baño         | {{ states('sensor.bano_temperature') }} |
+
+                  | Frigorífico  | {{ states('sensor.frigorifico_temperature')
+                  }} | Exterior     | {{ states('sensor.salita_temperature') }}
+                  |
+
+                  | Pc           | {{ states('sensor.interior_pc_temperature')
+                  }} |             |                            |
+                card_mod:
+                  style: |
+                    ha-card {
+                      background: none;
+                      height: 300px;
+                      overflow-y: auto;
+                      text-align: center;
+                      display: block;
+                      --ha-card-background: none;
+                    }
+        - type: conditional
+          conditions:
+            - entity: input_boolean.mostrar_controles_estancia
+              state: "on"
+          card:
+            type: vertical-stack
+            card_mod:
+              style: |
+                ha-card {
+                  background: #000000;
+                  border-radius: 12px;
+                  /* Altura máxima para permitir el scroll si es necesario */
+                  max-height: 600px;
+                  overflow-y: auto;
+                  padding: 10px 0; /* Un poco de padding interior */
+                }
+            cards:
+              - type: custom:mushroom-template-card
+                primary: ENTRADA
+                secondary: ""
+                icon: ""
+                layout: vertical
+                card_mod:
+                  style: |
+                    ha-card {
+                      font-variant: small-caps;
+                      background: rgba(0, 0, 0, 0.0) !important;
+                      --card-primary-font-size: 25px;
+                      border: none;
+                    }
+              - type: horizontal-stack
+                cards:
+                  - type: custom:mushroom-template-card
+                    entity: switch.luz_entrada
+                    primary: Luz Entrada
+                    secondary: >-
+                      {% if is_state(entity, 'on') %} Encendida {% else %}
+                      Apagada {% endif %}
+                    layout: vertical
+                    icon: >-
+                      {% if is_state(entity, 'on') %} mdi:light-switch {% else
+                      %} mdi:light-switch-off {% endif %}
+                    icon_color: >-
+                      {% if is_state(entity, 'on') %} yellow {% else %} #0099ff
+                      {% endif %}
+                    card_mod:
+                      style:
+                        mushroom-state-info$: |
+                          .secondary {
+                            color: {% if is_state('switch.luz_armario_entrada', 'on') %} yellow; {% else %} red; {% endif %}
+                          }
+                        mushroom-shape-icon$: |
+                          .shape {
+                            --shape-color: transparent !important;
+                            --shape-color-disabled: transparent !important;
+                            --icon-symbol-size: 30px;
+                          {% if states(config.entity) == 'on' %}
+                            --shape-animation: ping 1s infinite;
+                            --icon-symbol-size: 35px;
+                          {% endif %}
+                          }
+                          @keyframes ping {
+                              0% {box-shadow: 0 0 0 0 rgba(var(--rgb-white), 0.9);}
+                              70% {box-shadow: 0 0 0 8px transparent;}
+                              100% {box-shadow: 0 0 0 0 transparent;}
+                          }
+                        .: |
+                          ha-card {
+                            background: #000000;
+                            box-shadow: none;
+                            border-radius: 12px;
+                            border: none;
+                          }
+                  - type: custom:mushroom-template-card
+                    entity: switch.luz_armario_entrada
+                    primary: Luz Armario
+                    secondary: >-
+                      {% if is_state(entity, 'on') %} Encendida {% else %}
+                      Apagada {% endif %}
+                    layout: vertical
+                    icon: >-
+                      {% if is_state(entity, 'on') %} mdi:light-switch {% else
+                      %} mdi:light-switch-off {% endif %}
+                    icon_color: >-
+                      {% if is_state(entity, 'on') %} yellow {% else %} #0099ff
+                      {% endif %}
+                    card_mod:
+                      style:
+                        mushroom-state-info$: |
+                          .secondary {
+                            color: {% if is_state('switch.luz_armario_entrada', 'on') %} yellow; {% else %} red; {% endif %}
+                          }
+                        mushroom-shape-icon$: |
+                          .shape {
+                            --shape-color: transparent !important;
+                            --shape-color-disabled: transparent !important;
+                            --icon-symbol-size: 30px;
+                          {% if states(config.entity) == 'on' %}
+                            --shape-animation: ping 1s infinite;
+                            --icon-symbol-size: 35px;
+                          {% endif %}
+                          }
+                          @keyframes ping {
+                              0% {box-shadow: 0 0 0 0 rgba(var(--rgb-white), 0.9);}
+                              70% {box-shadow: 0 0 0 8px transparent;}
+                              100% {box-shadow: 0 0 0 0 transparent;}
+                          }
+                        .: |
+                          ha-card {
+                            background: #000000;
+                            box-shadow: none;
+                            border-radius: 12px;
+                            border: none;
+                          }
+                  - type: custom:mushroom-template-card
+                    entity: switch.luz_pasillo
+                    primary: Luz Pasillo
+                    secondary: >-
+                      {% if is_state(entity, 'on') %} Encendida {% else %}
+                      Apagada {% endif %}
+                    layout: vertical
+                    icon: >-
+                      {% if is_state(entity, 'on') %} mdi:light-switch {% else
+                      %} mdi:light-switch-off {% endif %}
+                    icon_color: >-
+                      {% if is_state(entity, 'on') %} yellow {% else %} #0099ff
+                      {% endif %}
+                    card_mod:
+                      style:
+                        mushroom-state-info$: |
+                          .secondary {
+                            color: {% if is_state('switch.luz_pasillo', 'on') %} yellow; {% else %} red; {% endif %}
+                          }
+                        mushroom-shape-icon$: |
+                          .shape {
+                            --shape-color: transparent !important;
+                            --shape-color-disabled: transparent !important;
+                            --icon-symbol-size: 30px;
+                          {% if states(config.entity) == 'on' %}
+                            --shape-animation: ping 1s infinite;
+                            --icon-symbol-size: 35px;
+                          {% endif %}
+                          }
+                          @keyframes ping {
+                              0% {box-shadow: 0 0 0 0 rgba(var(--rgb-white), 0.9);}
+                              70% {box-shadow: 0 0 0 8px transparent;}
+                              100% {box-shadow: 0 0 0 0 transparent;}
+                          }
+                        .: |
+                          ha-card {
+                            background: #000000;
+                            box-shadow: none;
+                            border-radius: 12px;
+                            border: none;
+                          }
+              - type: custom:mushroom-light-card
+                entity: light.luz_rosa
+                icon: mdi:lightbulb
+                icon_color: >-
+                  {% if is_state(entity, 'on') %} yellow {% else %} #0099ff {%
+                  endif %}
+                use_light_color: true
+                show_brightness_control: true
+                show_color_temp_control: true
+                show_color_control: true
+                collapsible_controls: true
+                card_mod:
+                  style:
+                    mushroom-shape-icon$: |
+                      .shape {
+                        --shape-color: transparent !important;
+                        --shape-color-disabled: transparent !important;
+                        --icon-symbol-size: 30px;
+                      {% if states(config.entity) == 'on' %}
+                        --shape-animation: ping 1s infinite;
+                        --icon-symbol-size: 35px;
+                      {% endif %}
+                      }
+                      @keyframes ping {
+                          0% {box-shadow: 0 0 0 0 rgba(var(--rgb-white), 0.9);}
+                          70% {box-shadow: 0 0 0 8px transparent;}
+                          100% {box-shadow: 0 0 0 0 transparent;}
+                      }
+                    .: |
+                      ha-card {
+                        background: #000000;
+                        box-shadow: none;
+                        border-radius: 12px;
+                        border: 2px solid #0099ff;
+                      }
+              - type: custom:mushroom-alarm-control-panel-card
+                entity: alarm_control_panel.alarma
+                name: ALARMA
+                show_keypad: true
+                card_mod:
+                  style: |
+                    ha-card {
+                      background: #000000;
+                      box-shadow: none;
+                      border-radius: 12px;
+                      border: 2px solid #0099ff;
+                      --ha-card-header-color: var(--primary-text-color);
+                    }
+  - type: conditional
+    conditions:
+      - entity: input_select.estancia_seleccionada
+        state: cocina
+    card:
+      type: vertical-stack
+      cards:
+        - type: conditional
+          conditions:
+            - entity: input_boolean.mostrar_controles_estancia
+              state: "off"
+          card:
+            type: custom:stack-in-card
+            card_mod:
+              style: |
+                ha-card {
+                  background: rgba(0, 0, 0, 0.3);
+                  border-radius: 12px;
+                  height: 300px;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                }
+            cards:
+              - type: markdown
+                content: |
+                  # 🍳 Cocina en Espera
+                  Los controles se han ocultado por inactividad.
+
+                  Pulsa en la estancia para activar los controles.
+                card_mod:
+                  style: |
+                    ha-card {
+                      background: none;
+                      text-align: center;
+                      --ha-card-background: none;
+                    }
+        - type: conditional
+          conditions:
+            - entity: input_boolean.mostrar_controles_estancia
+              state: "on"
+          card:
+            type: vertical-stack
+            card_mod:
+              style: |
+                ha-card {
+                  background: #000000;
+                  border-radius: 12px;
+                  max-height: 600px;
+                  overflow-y: auto;
+                  padding: 10px 0;
+                }
+            cards:
+              - type: custom:mushroom-template-card
+                primary: COCINA
+                secondary: ""
+                icon: ""
+                layout: vertical
+                card_mod:
+                  style: |
+                    ha-card {
+                      font-variant: small-caps;
+                      background: rgba(0, 0, 0, 0.0) !important;
+                      --card-primary-font-size: 25px;
+                      border: none;
+                    }
+              - type: horizontal-stack
+                cards:
+                  - type: custom:mushroom-template-card
+                    entity: switch.luz_cocina
+                    primary: Luz cocina
+                    secondary: >-
+                      {% if is_state(entity, 'on') %} Encendida {% else %}
+                      Apagada {% endif %}
+                    layout: horizontal
+                    icon: >-
+                      {% if is_state(entity, 'on') %} mdi:light-switch {% else
+                      %} mdi:light-switch-off {% endif %}
+                    icon_color: >-
+                      {% if is_state(entity, 'on') %} yellow {% else %} #0099ff
+                      {% endif %}
+                    card_mod:
+                      style:
+                        mushroom-state-info$: |
+                          .secondary {
+                            color: {% if is_state(entity, 'on') %} yellow; {% else %} red; {% endif %}
+                          }
+                        mushroom-shape-icon$: |
+                          .shape {
+                            --shape-color: transparent !important;
+                            --shape-color-disabled: transparent !important;
+                            --icon-symbol-size: 30px;
+                          {% if states(config.entity) == 'on' %}
+                            --shape-animation: ping 1s infinite;
+                            --icon-symbol-size: 35px;
+                          {% endif %}
+                          }
+                          @keyframes ping {
+                            0% { box-shadow: 0 0 0 0 rgba(var(--rgb-white), 0.9); }
+                            70% { box-shadow: 0 0 0 8px transparent; }
+                            100% { box-shadow: 0 0 0 0 transparent; }
+                          }
+                        .: |
+                          ha-card {
+                            background: #000000;
+                            box-shadow: none;
+                            border-radius: 12px;
+                            border: none;
+                          }
+                  - type: custom:mushroom-template-card
+                    entity: binary_sensor.puerta_congelador_contact
+                    primary: Congelador
+                    secondary: >-
+                      {% if is_state(entity, 'on') %} Abierto {% else %} Cerrado
+                      {% endif %}
+                    layout: horizontal
+                    icon: >-
+                      {% if is_state(entity, 'on') %} mdi:alert {% else %}
+                      mdi:snowflake {% endif %}
+                    icon_color: >-
+                      {% if is_state(entity, 'on') %} #FF0000 {% else %} #0099ff
+                      {% endif %}
+                    tap_action:
+                      action: more-info
+                    hold_action:
+                      action: none
+                    double_tap_action:
+                      action: none
+                    card_mod:
+                      style: |
+                        mushroom-shape-icon {
+                          --shape-color: transparent !important;
+                          --shape-color-disabled: transparent !important;
+                        }
+                        ha-state-icon {
+                          --icon-symbol-size: 30px;
+                        }
+                        ha-card {
+                          background: #000000;
+                          box-shadow: none;
+                        }
+              - type: horizontal-stack
+                cards:
+                  - type: custom:mushroom-template-card
+                    entity: switch.frigorifico
+                    primary: Frigorífico
+                    secondary: >-
+                      {{ states('sensor.frigorifico_temperature') | round(2)
+                      }}°C | {{ states('sensor.frigorifico_potencia') | round(2)
+                      }}W
+                    icon: mdi:fridge-industrial
+                    tap_action:
+                      action: more-info
+                    hold_action:
+                      action: toggle
+                    color: >-
+                      {% if is_state(entity, 'on') %} #0099ff {% else %} #FF0000
+                      {% endif %}
+                    features_position: bottom
+                    card_mod:
+                      style: |
+                        mushroom-shape-icon {
+                          --shape-color: transparent !important;
+                          --shape-color-disabled: transparent !important;
+                          --icon-symbol-size: 30px;
+                        }
+                        ha-card {
+                          background: #000000;
+                          box-shadow: none;
+                        }
+                  - type: custom:mushroom-template-card
+                    entity: switch.lavadora
+                    primary: Lavadora {{ states('input_select.estado_de_lavado') }}
+                    secondary: |-
+                      {% if is_state(entity, 'on') %}
+                        {{ (states('sensor.lavadora_potencia') | float(0) > 4) | iif('Lavando', 'Encendida') }}
+                      {% else %}
+                        Apagada
+                      {% endif %}
+                    icon: mdi:washing-machine
+                    icon_color: >-
+                      {% if is_state(entity, 'on') %} #0099ff {% else %} #FF0000
+                      {% endif %}
+                    card_mod:
+                      style: |
+                        mushroom-shape-icon {
+                          --shape-color: transparent !important;
+                          --shape-color-disabled: transparent !important;
+                        }
+                        ha-state-icon {
+                          --icon-symbol-size: 30px;
+                        }
+                        ha-card {
+                          background: #000000;
+                          box-shadow: none;
+                        }
+              - type: horizontal-stack
+                cards:
+                  - type: custom:mushroom-template-card
+                    entity: switch.microondas
+                    primary: Microondas
+                    icon: mdi:microwave
+                    secondary: >-
+                      {% if is_state(entity, 'on') %} Encendido {% else %}
+                      Apagado {% endif %}
+                    tap_action:
+                      action: toggle
+                    icon_color: >-
+                      {% if is_state(entity, 'on') %} #0099ff {% else %} #FF0000
+                      {% endif %}
+                    card_mod:
+                      style: |
+                        mushroom-shape-icon {
+                          --shape-color: transparent !important;
+                          --shape-color-disabled: transparent !important;
+                        }
+                        ha-state-icon {
+                          --icon-symbol-size: 30px;
+                        }
+                        ha-card {
+                          background: #000000;
+                          box-shadow: none;
+                        }
+                  - type: custom:mushroom-template-card
+                    entity: switch.cafetera
+                    primary: Cafetera
+                    icon: mdi:coffee-maker
+                    secondary: >-
+                      {% if is_state(entity, 'on') %} Encendido {% else %}
+                      Apagado {% endif %}
+                    tap_action:
+                      action: toggle
+                    icon_color: >-
+                      {% if is_state(entity, 'on') %} #0099ff {% else %} red {%
+                      endif %}
+                    card_mod:
+                      style: |
+                        mushroom-shape-icon {
+                          --shape-color: transparent !important;
+                          --shape-color-disabled: transparent !important;
+                        }
+                        ha-state-icon {
+                          --icon-symbol-size: 30px;
+                        }
+                        ha-card {
+                          background: #000000;
+                          box-shadow: none;
+                        }
+  - type: conditional
+    conditions:
+      - entity: input_select.estancia_seleccionada
+        state: salon
+    card:
+      type: vertical-stack
+      cards:
+        - type: conditional
+          conditions:
+            - entity: input_boolean.mostrar_controles_estancia
+              state: "off"
+          card:
+            type: custom:stack-in-card
+            card_mod:
+              style: |
+                ha-card {
+                  background: rgba(0, 0, 0, 0.3);
+                  border-radius: 12px;
+                  height: 300px;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                }
+            cards:
+              - type: markdown
+                content: |
+                  # 🍳 Salón en Espera
+                  Los controles se han ocultado por inactividad.
+
+                  Pulsa en la estancia para activar los controles.
+                card_mod:
+                  style: |
+                    ha-card {
+                      background: none;
+                      text-align: center;
+                      --ha-card-background: none;
+                    }
+        - type: conditional
+          conditions:
+            - entity: input_boolean.mostrar_controles_estancia
+              state: "on"
+          card:
+            type: vertical-stack
+            card_mod:
+              style: |
+                ha-card {
+                  background: #000000;
+                  border-radius: 12px;
+                  /* Altura máxima para permitir el scroll si es necesario */
+                  max-height: 600px;
+                  overflow-y: auto;
+                  padding: 10px 0; /* Un poco de padding interior */
+                }
+            cards:
+              - type: custom:mushroom-template-card
+                primary: SALON
+                secondary: ""
+                icon: ""
+                layout: vertical
+                card_mod:
+                  style: |
+                    ha-card {
+                      font-variant: small-caps;
+                      background: rgba(0, 0, 0, 0.0) !important;
+                      --card-primary-font-size: 25px;
+                      border: none;
+                    }
+              - type: horizontal-stack
+                cards:
+                  - type: custom:mushroom-template-card
+                    entity: switch.luz_salon
+                    primary: Luz Salón
+                    secondary: >-
+                      {% if is_state(entity, 'on') %} Encendida {% else %}
+                      Apagada {% endif %}
+                    layout: vertical
+                    icon: >-
+                      {% if is_state(entity, 'on') %} mdi:light-switch {% else
+                      %} mdi:light-switch-off {% endif %}
+                    icon_color: >-
+                      {% if is_state(entity, 'on') %} yellow {% else %} #0099ff
+                      {% endif %}
+                    card_mod:
+                      style:
+                        mushroom-state-info$: |
+                          .secondary {
+                            color: {% if is_state('switch.luz_armario_entrada', 'on') %} yellow; {% else %} red; {% endif %}
+                          }
+                        mushroom-shape-icon$: |
+                          .shape {
+                            --shape-color: transparent !important;
+                            --shape-color-disabled: transparent !important;
+                            --icon-symbol-size: 30px;
+                          {% if states(config.entity) == 'on' %}
+                            --shape-animation: ping 1s infinite;
+                            --icon-symbol-size: 35px;
+                          {% endif %}
+                          }
+                          @keyframes ping {
+                              0% {box-shadow: 0 0 0 0 rgba(var(--rgb-white), 0.9);}
+                              70% {box-shadow: 0 0 0 8px transparent;}
+                              100% {box-shadow: 0 0 0 0 transparent;}
+                          }
+                        .: |
+                          ha-card {
+                            background: #000000;
+                            box-shadow: none;
+                            border-radius: 12px;
+                            border: none;
+                          }
+                  - type: custom:mushroom-template-card
+                    entity: switch.monitores
+                    primary: Monitores
+                    secondary: >-
+                      {% if is_state(entity, 'on') %} Encendida {% else %}
+                      Apagada {% endif %}
+                    layout: vertical
+                    icon: >-
+                      {% if is_state(entity, 'on') %} mdi:light-switch {% else
+                      %} mdi:light-switch-off {% endif %}
+                    icon_color: >-
+                      {% if is_state(entity, 'on') %} yellow {% else %} #0099ff
+                      {% endif %}
+                    card_mod:
+                      style:
+                        mushroom-state-info$: |
+                          .secondary {
+                            color: {% if is_state('switch.luz_salon', 'on') %} yellow; {% else %} red; {% endif %}
+                          }
+                        mushroom-shape-icon$: |
+                          .shape {
+                            --shape-color: transparent !important;
+                            --shape-color-disabled: transparent !important;
+                            --icon-symbol-size: 30px;
+                          {% if states(config.entity) == 'on' %}
+                            --shape-animation: ping 1s infinite;
+                            --icon-symbol-size: 35px;
+                          {% endif %}
+                          }
+                          @keyframes ping {
+                              0% {box-shadow: 0 0 0 0 rgba(var(--rgb-white), 0.9);}
+                              70% {box-shadow: 0 0 0 8px transparent;}
+                              100% {box-shadow: 0 0 0 0 transparent;}
+                          }
+                        .: |
+                          ha-card {
+                            background: #000000;
+                            box-shadow: none;
+                            border-radius: 12px;
+                            border: none;
+                          }
+                  - type: custom:mushroom-template-card
+                    entity: switch.amplificador
+                    primary: Amplificador
+                    secondary: >-
+                      Consumo {{ states('sensor.amplificador_power', 'float(2)')
+                      }}W
+                    layout: vertical
+                    icon: >-
+                      {% if is_state(entity, 'on') %} mdi:light-switch {% else
+                      %} mdi:light-switch-off {% endif %}
+                    icon_color: >-
+                      {% if is_state(entity, 'on') %} yellow {% else %} #0099ff
+                      {% endif %}
+                    card_mod:
+                      style:
+                        mushroom-state-info$: |
+                          .secondary {
+                            color: {% if is_state('switch.luz_pasillo', 'on') %} yellow; {% else %} red; {% endif %}
+                          }
+                        mushroom-shape-icon$: |
+                          .shape {
+                            --shape-color: transparent !important;
+                            --shape-color-disabled: transparent !important;
+                            --icon-symbol-size: 30px;
+                          {% if states(config.entity) == 'on' %}
+                            --shape-animation: ping 1s infinite;
+                            --icon-symbol-size: 35px;
+                          {% endif %}
+                          }
+                          @keyframes ping {
+                              0% {box-shadow: 0 0 0 0 rgba(var(--rgb-white), 0.9);}
+                              70% {box-shadow: 0 0 0 8px transparent;}
+                              100% {box-shadow: 0 0 0 0 transparent;}
+                          }
+                        .: |
+                          ha-card {
+                            background: #000000;
+                            box-shadow: none;
+                            border-radius: 12px;
+                            border: none;
+                          }
+              - type: custom:mushroom-light-card
+                entity: light.lampara_salon
+                icon: mdi:floor-lamp
+                icon_color: >-
+                  {% if is_state(entity, 'on') %} yellow {% else %} #0099ff {%
+                  endif %}
+                use_light_color: true
+                show_brightness_control: true
+                show_color_temp_control: true
+                show_color_control: true
+                collapsible_controls: true
+                card_mod:
+                  style:
+                    mushroom-shape-icon$: |
+                      .shape {
+                        --shape-color: transparent !important;
+                        --shape-color-disabled: transparent !important;
+                        --icon-symbol-size: 30px;
+                      {% if states(config.entity) == 'on' %}
+                        --shape-animation: ping 1s infinite;
+                        --icon-symbol-size: 35px;
+                      {% endif %}
+                      }
+                      @keyframes ping {
+                          0% {box-shadow: 0 0 0 0 rgba(var(--rgb-white), 0.9);}
+                          70% {box-shadow: 0 0 0 8px transparent;}
+                          100% {box-shadow: 0 0 0 0 transparent;}
+                      }
+                    .: |
+                      ha-card {
+                        background: #000000;
+                        box-shadow: none;
+                        border-radius: 12px;
+                        border: 2px solid #0099ff;
+                      }
+  - type: conditional
+    conditions:
+      - entity: input_select.estancia_seleccionada
+        state: salita
+    card:
+      type: vertical-stack
+      cards:
+        - type: conditional
+          conditions:
+            - entity: input_boolean.mostrar_controles_estancia
+              state: "off"
+          card:
+            type: custom:stack-in-card
+            card_mod:
+              style: |
+                ha-card {
+                  background: rgba(0, 0, 0, 0.3);
+                  border-radius: 12px;
+                  height: 300px;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                }
+            cards:
+              - type: markdown
+                content: |
+                  # 🍳 Salita en Espera
+                  Los controles se han ocultado por inactividad.
+
+                  Pulsa en la estancia para activar los controles.
+                card_mod:
+                  style: |
+                    ha-card {
+                      background: none;
+                      text-align: center;
+                      --ha-card-background: none;
+                    }
+        - type: conditional
+          conditions:
+            - entity: input_boolean.mostrar_controles_estancia
+              state: "on"
+          card:
+            type: vertical-stack
+            card_mod:
+              style: |
+                ha-card {
+                  background: #000000;
+                  border-radius: 12px;
+                  /* Altura máxima para permitir el scroll si es necesario */
+                  max-height: 600px;
+                  overflow-y: auto;
+                  padding: 10px 0; /* Un poco de padding interior */
+                }
+            cards:
+              - type: custom:mushroom-template-card
+                primary: SALITA
+                secondary: ""
+                icon: ""
+                layout: vertical
+                card_mod:
+                  style: |
+                    ha-card {
+                      font-variant: small-caps;
+                      background: rgba(0, 0, 0, 0.0) !important;
+                      --card-primary-font-size: 25px;
+                      border: none;
+                    }
+              - type: horizontal-stack
+                cards:
+                  - type: custom:mushroom-template-card
+                    entity: switch.luz_salita
+                    primary: Luz Salita
+                    secondary: >-
+                      {% if is_state(entity, 'on') %} Encendida {% else %}
+                      Apagada {% endif %}
+                    layout: vertical
+                    icon: >-
+                      {% if is_state(entity, 'on') %} mdi:light-switch {% else
+                      %} mdi:light-switch-off {% endif %}
+                    icon_color: >-
+                      {% if is_state(entity, 'on') %} yellow {% else %} #0099ff
+                      {% endif %}
+                    card_mod:
+                      style:
+                        mushroom-state-info$: |
+                          .secondary {
+                            color: {% if is_state('switch.luz_armario_entrada', 'on') %} yellow; {% else %} red; {% endif %}
+                          }
+                        mushroom-shape-icon$: |
+                          .shape {
+                            --shape-color: transparent !important;
+                            --shape-color-disabled: transparent !important;
+                            --icon-symbol-size: 30px;
+                          {% if states(config.entity) == 'on' %}
+                            --shape-animation: ping 1s infinite;
+                            --icon-symbol-size: 35px;
+                          {% endif %}
+                          }
+                          @keyframes ping {
+                              0% {box-shadow: 0 0 0 0 rgba(var(--rgb-white), 0.9);}
+                              70% {box-shadow: 0 0 0 8px transparent;}
+                              100% {box-shadow: 0 0 0 0 transparent;}
+                          }
+                        .: |
+                          ha-card {
+                            background: #000000;
+                            box-shadow: none;
+                            border-radius: 12px;
+                            border: none;
+                          }
+                  - type: custom:mushroom-template-card
+                    entity: binary_sensor.camara_1_cell_motion_detection
+                    primary: Cámara
+                    secondary: >-
+                      {% if is_state(entity, 'on') %} Detección {% else %} No
+                      Detectado {% endif %}
+                    layout: vertical
+                    icon: mdi:pirate
+                    icon_color: |-
+                      {% if is_state(entity, 'on') %}
+                        yellow
+                      {% else %}
+                        red 
+                      {% endif %}
+                    card_mod:
+                      style:
+                        mushroom-state-info$: |
+                          .secondary {
+                            color: {% if is_state('switch.luz_armario_entrada', 'on') %} yellow; {% else %} red; {% endif %}
+                          }
+                        mushroom-shape-icon$: |
+                          .shape {
+                            --shape-color: transparent !important;
+                            --shape-color-disabled: transparent !important;
+                            --icon-symbol-size: 30px;
+                          {% if states(config.entity) == 'on' %}
+                            --shape-animation: ping 1s infinite;
+                            --icon-symbol-size: 35px;
+                          {% endif %}
+                          }
+                          @keyframes ping {
+                              0% {box-shadow: 0 0 0 0 rgba(var(--rgb-white), 0.9);}
+                              70% {box-shadow: 0 0 0 8px transparent;}
+                              100% {box-shadow: 0 0 0 0 transparent;}
+                          }
+                        .: |
+                          ha-card {
+                            background: #000000;
+                            box-shadow: none;
+                            border-radius: 12px;
+                            border: none;
+                          }
+                  - type: custom:mushroom-template-card
+                    entity: sensor.salita_temperature
+                    primary: "{{ states('sensor.dormitorio_temperature') }} °C"
+                    secondary: Temperatura
+                    layout: vertical
+                    icon: mdi:thermometer
+                    icon_color: green
+                    card_mod:
+                      style:
+                        mushroom-state-info$: |
+                          .secondary {
+                            color: {% if is_state('switch.luz_pasillo', 'on') %} yellow; {% else %} red; {% endif %}
+                          }
+                        mushroom-shape-icon$: |
+                          .shape {
+                            --shape-color: transparent !important;
+                            --shape-color-disabled: transparent !important;
+                            --icon-symbol-size: 30px;
+                          {% if states(config.entity) == 'on' %}
+                            --shape-animation: ping 1s infinite;
+                            --icon-symbol-size: 35px;
+                          {% endif %}
+                          }
+                          @keyframes ping {
+                              0% {box-shadow: 0 0 0 0 rgba(var(--rgb-white), 0.9);}
+                              70% {box-shadow: 0 0 0 8px transparent;}
+                              100% {box-shadow: 0 0 0 0 transparent;}
+                          }
+                        .: |
+                          ha-card {
+                            background: #000000;
+                            box-shadow: none;
+                            border-radius: 12px;
+                            border: none;
+                          }
+              - type: custom:mushroom-light-card
+                entity: light.lampara_salita
+                icon: mdi:floor-lamp
+                icon_color: >-
+                  {% if is_state(entity, 'on') %} yellow {% else %} #0099ff {%
+                  endif %}
+                use_light_color: true
+                show_brightness_control: true
+                show_color_temp_control: true
+                show_color_control: true
+                collapsible_controls: true
+                card_mod:
+                  style:
+                    mushroom-shape-icon$: |
+                      .shape {
+                        --shape-color: transparent !important;
+                        --shape-color-disabled: transparent !important;
+                        --icon-symbol-size: 30px;
+                      {% if states(config.entity) == 'on' %}
+                        --shape-animation: ping 1s infinite;
+                        --icon-symbol-size: 35px;
+                      {% endif %}
+                      }
+                      @keyframes ping {
+                          0% {box-shadow: 0 0 0 0 rgba(var(--rgb-white), 0.9);}
+                          70% {box-shadow: 0 0 0 8px transparent;}
+                          100% {box-shadow: 0 0 0 0 transparent;}
+                      }
+                    .: |
+                      ha-card {
+                        background: #000000;
+                        box-shadow: none;
+                        border-radius: 12px;
+                        border: 2px solid #0099ff;
+                      }
+  - type: conditional
+    conditions:
+      - entity: input_select.estancia_seleccionada
+        state: dormitorio
+    card:
+      type: vertical-stack
+      cards:
+        - type: conditional
+          conditions:
+            - entity: input_boolean.mostrar_controles_estancia
+              state: "off"
+          card:
+            type: custom:stack-in-card
+            card_mod:
+              style: |
+                ha-card {
+                  background: rgba(0, 0, 0, 0.3);
+                  border-radius: 12px;
+                  height: 300px;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                }
+            cards:
+              - type: markdown
+                content: |
+                  # 🍳 Dormitorio en Espera
+                  Los controles se han ocultado por inactividad.
+
+                  Pulsa en la estancia para activar los controles.
+                card_mod:
+                  style: |
+                    ha-card {
+                      background: none;
+                      text-align: center;
+                      --ha-card-background: none;
+                    }
+        - type: conditional
+          conditions:
+            - entity: input_boolean.mostrar_controles_estancia
+              state: "on"
+          card:
+            type: vertical-stack
+            card_mod:
+              style: |
+                ha-card {
+                  background: #000000;
+                  border-radius: 12px;
+                  /* Altura máxima para permitir el scroll si es necesario */
+                  max-height: 600px;
+                  overflow-y: auto;
+                  padding: 10px 0; /* Un poco de padding interior */
+                }
+            cards:
+              - type: custom:mushroom-template-card
+                primary: DORMITORIO
+                secondary: >-
+                  {{'🌡️'}} {{ (states('sensor.dormitorio_temperature'))}}°C
+                  {{'💧'}}{{ (states('sensor.dormitorio_humidity'))}}%
+                icon: ""
+                layout: vertical
+                card_mod:
+                  style: |
+                    ha-card {
+                      font-variant: small-caps;
+                      background: rgba(0, 0, 0, 0.0) !important;
+                      --card-primary-font-size: 25px;
+                      border: none;
+                    }
+              - type: horizontal-stack
+                cards:
+                  - type: custom:mushroom-template-card
+                    entity: switch.luz_dormitorio
+                    primary: Luz Dormitorio
+                    secondary: >-
+                      {% if is_state(entity, 'on') %} Encendida {% else %}
+                      Apagada {% endif %}
+                    layout: vertical
+                    icon: >-
+                      {% if is_state(entity, 'on') %} mdi:light-switch {% else
+                      %} mdi:light-switch-off {% endif %}
+                    icon_color: >-
+                      {% if is_state(entity, 'on') %} yellow {% else %} #0099ff
+                      {% endif %}
+                    card_mod:
+                      style:
+                        mushroom-state-info$: |
+                          .secondary {
+                            color: {% if is_state('switch.luz_dormitorio', 'on') %} yellow; {% else %} red; {% endif %}
+                          }
+                        mushroom-shape-icon$: |
+                          .shape {
+                            --shape-color: transparent !important;
+                            --shape-color-disabled: transparent !important;
+                            --icon-symbol-size: 30px;
+                          {% if states(config.entity) == 'on' %}
+                            --shape-animation: ping 1s infinite;
+                            --icon-symbol-size: 35px;
+                          {% endif %}
+                          }
+                          @keyframes ping {
+                              0% {box-shadow: 0 0 0 0 rgba(var(--rgb-white), 0.9);}
+                              70% {box-shadow: 0 0 0 8px transparent;}
+                              100% {box-shadow: 0 0 0 0 transparent;}
+                          }
+                        .: |
+                          ha-card {
+                            background: #000000;
+                            box-shadow: none;
+                            border-radius: 12px;
+                            border: none;
+                          }
+                  - type: custom:mushroom-template-card
+                    entity: switch.luz_entrada_dormitorio
+                    primary: Entr. Dormitorio
+                    secondary: >-
+                      {% if is_state(entity, 'on') %} Encendida {% else %}
+                      Apagada {% endif %}
+                    layout: vertical
+                    icon: >-
+                      {% if is_state(entity, 'on') %} mdi:light-switch {% else
+                      %} mdi:light-switch-off {% endif %}
+                    icon_color: >-
+                      {% if is_state(entity, 'on') %} yellow {% else %} #0099ff
+                      {% endif %}
+                    card_mod:
+                      style:
+                        mushroom-state-info$: |
+                          .secondary {
+                            color: {% if is_state('switch.luz_entrada_dormitorio', 'on') %} yellow; {% else %} red; {% endif %}
+                          }
+                        mushroom-shape-icon$: |
+                          .shape {
+                            --shape-color: transparent !important;
+                            --shape-color-disabled: transparent !important;
+                            --icon-symbol-size: 30px;
+                          {% if states(config.entity) == 'on' %}
+                            --shape-animation: ping 1s infinite;
+                            --icon-symbol-size: 35px;
+                          {% endif %}
+                          }
+                          @keyframes ping {
+                              0% {box-shadow: 0 0 0 0 rgba(var(--rgb-white), 0.9);}
+                              70% {box-shadow: 0 0 0 8px transparent;}
+                              100% {box-shadow: 0 0 0 0 transparent;}
+                          }
+                        .: |
+                          ha-card {
+                            background: #000000;
+                            box-shadow: none;
+                            border-radius: 12px;
+                            border: none;
+                          }
+                  - type: custom:mushroom-template-card
+                    entity: switch.television_dormitorio
+                    primary: TV Dormitorio
+                    secondary: >-
+                      {% if is_state(entity, 'on') %} Encendido {% else %}
+                      Apagado {% endif %}
+                    layout: vertical
+                    icon: >-
+                      {% if is_state(entity, 'on') %} mdi:light-switch {% else
+                      %} mdi:light-switch-off {% endif %}
+                    icon_color: >-
+                      {% if is_state(entity, 'on') %} yellow {% else %} #0099ff
+                      {% endif %}
+                    card_mod:
+                      style:
+                        mushroom-state-info$: |
+                          .secondary {
+                            color: {% if is_state('switch.television_dormitorio', 'on') %} yellow; {% else %} red; {% endif %}
+                          }
+                        mushroom-shape-icon$: |
+                          .shape {
+                            --shape-color: transparent !important;
+                            --shape-color-disabled: transparent !important;
+                            --icon-symbol-size: 30px;
+                          {% if states(config.entity) == 'on' %}
+                            --shape-animation: ping 1s infinite;
+                            --icon-symbol-size: 35px;
+                          {% endif %}
+                          }
+                          @keyframes ping {
+                              0% {box-shadow: 0 0 0 0 rgba(var(--rgb-white), 0.9);}
+                              70% {box-shadow: 0 0 0 8px transparent;}
+                              100% {box-shadow: 0 0 0 0 transparent;}
+                          }
+                        .: |
+                          ha-card {
+                            background: #000000;
+                            box-shadow: none;
+                            border-radius: 12px;
+                            border: none;
+                          }
+              - type: custom:mushroom-light-card
+                entity: light.lampara_sonia
+                icon: mdi:floor-lamp
+                icon_color: >-
+                  {% if is_state(entity, 'on') %} yellow {% else %} #0099ff {%
+                  endif %}
+                use_light_color: true
+                show_brightness_control: true
+                show_color_temp_control: true
+                show_color_control: true
+                collapsible_controls: true
+                card_mod:
+                  style:
+                    mushroom-shape-icon$: |
+                      .shape {
+                        --shape-color: transparent !important;
+                        --shape-color-disabled: transparent !important;
+                        --icon-symbol-size: 30px;
+                      {% if states(config.entity) == 'on' %}
+                        --shape-animation: ping 1s infinite;
+                        --icon-symbol-size: 35px;
+                      {% endif %}
+                      }
+                      @keyframes ping {
+                          0% {box-shadow: 0 0 0 0 rgba(var(--rgb-white), 0.9);}
+                          70% {box-shadow: 0 0 0 8px transparent;}
+                          100% {box-shadow: 0 0 0 0 transparent;}
+                      }
+                    .: |
+                      ha-card {
+                        background: #000000;
+                        box-shadow: none;
+                        border-radius: 12px;
+                        border: 2px solid #0099ff;
+                      }
+              - type: custom:mushroom-light-card
+                entity: light.lampara_javier
+                icon: mdi:floor-lamp
+                icon_color: >-
+                  {% if is_state(entity, 'on') %} yellow {% else %} #0099ff {%
+                  endif %}
+                use_light_color: true
+                show_brightness_control: true
+                show_color_temp_control: true
+                show_color_control: true
+                collapsible_controls: true
+                card_mod:
+                  style:
+                    mushroom-shape-icon$: |
+                      .shape {
+                        --shape-color: transparent !important;
+                        --shape-color-disabled: transparent !important;
+                        --icon-symbol-size: 30px;
+                      {% if states(config.entity) == 'on' %}
+                        --shape-animation: ping 1s infinite;
+                        --icon-symbol-size: 35px;
+                      {% endif %}
+                      }
+                      @keyframes ping {
+                          0% {box-shadow: 0 0 0 0 rgba(var(--rgb-white), 0.9);}
+                          70% {box-shadow: 0 0 0 8px transparent;}
+                          100% {box-shadow: 0 0 0 0 transparent;}
+                      }
+                    .: |
+                      ha-card {
+                        background: #000000;
+                        box-shadow: none;
+                        border-radius: 12px;
+                        border: 2px solid #0099ff;
+                      }
+              - type: custom:mushroom-light-card
+                entity: light.luz_bano_noche
+                icon: mdi:floor-lamp
+                icon_color: >-
+                  {% if is_state(entity, 'on') %} yellow {% else %} #0099ff {%
+                  endif %}
+                use_light_color: true
+                show_brightness_control: true
+                show_color_temp_control: true
+                show_color_control: true
+                collapsible_controls: true
+                card_mod:
+                  style:
+                    mushroom-shape-icon$: |
+                      .shape {
+                        --shape-color: transparent !important;
+                        --shape-color-disabled: transparent !important;
+                        --icon-symbol-size: 30px;
+                      {% if states(config.entity) == 'on' %}
+                        --shape-animation: ping 1s infinite;
+                        --icon-symbol-size: 35px;
+                      {% endif %}
+                      }
+                      @keyframes ping {
+                          0% {box-shadow: 0 0 0 0 rgba(var(--rgb-white), 0.9);}
+                          70% {box-shadow: 0 0 0 8px transparent;}
+                          100% {box-shadow: 0 0 0 0 transparent;}
+                      }
+                    .: |
+                      ha-card {
+                        background: #000000;
+                        box-shadow: none;
+                        border-radius: 12px;
+                        border: 2px solid #0099ff;
+                      }
