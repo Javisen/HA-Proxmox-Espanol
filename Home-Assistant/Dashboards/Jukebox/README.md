@@ -10,6 +10,9 @@ Esta tarjeta ofrece una interfaz completa y estética para el control de reprodu
 * **Botonera de Géneros**: Grid interactivo de 4 columnas con portadas personalizadas para lanzar listas de reproducción o escenas.
 * **Control de Volumen Especializado**: Botones dedicados para gestión de volumen externo (amplificadores) mediante escenas.
 * **Diseño Minimalista**: Estética "Dark Mode" con acentos en naranja (#FF8C00) y bordes redondeados.
+* **Modo de reproducción**: Reproduccion en modo aleatorio.
+* **Tipo de reproducción**: Por género musical.
+* **Acción de pulsación**: On/Off. Para detener la reproduccion solo hay que volver a pulsar sobre el género activo.
 
 ## 🛠️ Requisitos (HACS)
 Para una correcta visualización, es necesario instalar los siguientes complementos desde HACS:
