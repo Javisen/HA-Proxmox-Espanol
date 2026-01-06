@@ -41,7 +41,7 @@ action:
     target:
       entity_id: input_boolean.mostrar_controles_estancia
 mode: restart
-
+```yaml
 ## 🛠️ Requisitos de HACS
 Es imprescindible tener instalados los siguientes complementos para el correcto funcionamiento del YAML:
 
