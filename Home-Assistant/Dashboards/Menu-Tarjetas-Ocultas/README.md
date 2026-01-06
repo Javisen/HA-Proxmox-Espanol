@@ -15,6 +15,33 @@ Este módulo de interfaz permite gestionar de forma inteligente las diferentes e
     * **Colores Dinámicos**: Los iconos y textos secundarios cambian de color (Oro/Rojo/Azul) según el estado de la entidad.
     * **Estética Coherente**: Diseño basado en fondo negro puro (`#000000`) con bordes en azul neón (`#0099ff`) para dispositivos de alta carga tecnológica.
 
+ ## ⏱️ Automatización: Ocultación por Inactividad
+
+Para que el panel de control pase al "Modo Espera" automáticamente, se utiliza un temporizador (`timer`) y una automatización que detecta cuando dejas de interactuar con la pantalla.
+
+### 1. Crear el Temporizador (Helper)
+Añade un temporizador en Home Assistant:
+* **Nombre:** Temporizador Pantalla
+* **Entidad:** `timer.temporizador_pantalla`
+* **Duración:** `00:05:00` (5 minutos recomendado)
+
+### 2. La Automatización (YAML)
+Copia esta automatización para gestionar el cambio de estado:
+
+```yaml
+alias: "Dashboard: Ocultar controles por inactividad"
+description: "Apaga los controles si no hay movimiento o interacción"
+trigger:
+  - platform: event
+    event_type: timer.finished
+    event_data:
+      entity_id: timer.temporizador_pantalla
+action:
+  - service: input_boolean.turn_off
+    target:
+      entity_id: input_boolean.mostrar_controles_estancia
+mode: restart
+
 ## 🛠️ Requisitos de HACS
 Es imprescindible tener instalados los siguientes complementos para el correcto funcionamiento del YAML:
 
