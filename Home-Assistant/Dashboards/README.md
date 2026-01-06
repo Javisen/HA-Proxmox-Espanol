@@ -38,10 +38,8 @@ Cada carpeta contiene el código YAML listo para copiar y las instrucciones espe
 
 Este diseño está optimizado para un entorno técnico específico, garantizando fluidez y rapidez:
 
-* **Core:** Home Assistant OS sobre **Proxmox** (HP EliteDesk 800 G2 DM).
+* **Core:** Home Assistant OS sobre **Proxmox**.
 * **Audio:** Volumio en hardware dedicado conectado a un **FiiO BR13**, alimentando un amplificador **Denon** y bafles **Vieta E-500**.
-* **Gestión:** Visualización principal desde un **Lenovo Ideacentre Gaming 5** mediante red Gigabit.
-
 ---
 
 ## 📋 Requisitos Esenciales
