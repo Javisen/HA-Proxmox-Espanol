@@ -1,0 +1,533 @@
+type: custom:vertical-stack-in-card
+cards:
+  - type: custom:maxi-media-player
+    sections:
+      - player
+    entities:
+      - media_player.volumio
+    showVolumeUpAndDownButtons: false
+    topFavorites:
+      - ""
+    hideBrowseMediaButton: false
+    showAudioInputFormat: false
+    artworkAsBackground: false
+    title: VOLUMIO JUKEBOX
+    hidePlayerControlPowerButton: false
+    entityId: media_player.volumio
+    dynamicVolumeSlider: false
+    dynamicVolumeSliderThreshold: 20
+    dynamicVolumeSliderMax: 32
+    showSourceInPlayer: true
+    showChannelInPlayer: true
+    adjustVolumeRelativeToMainPlayer: false
+    playerVolumeEntityId: media_player.volumio
+    replaceHttpWithHttpsForThumbnails: false
+    showBrowseMediaInPlayerSection: false
+    changeVolumeOnSlide: false
+    hideGroupCurrentTrack: false
+    favoritesHideTitleForThumbnailIcons: false
+    hidePlaylistInPlayer: false
+    dontSwitchPlayerWhenGrouping: false
+    allowPlayerVolumeEntityOutsideOfGroup: false
+    skipApplyButtonWhenGrouping: false
+    hideVolumeCogwheel: false
+    card_mod:
+      style:
+        mxmp-player$ mxmp-player-controls$: |
+          mxmp-volume {
+            display: none;
+          }
+              
+            
+  - type: custom:mushroom-chips-card
+    chips:
+      - type: action
+        tap_action:
+          action: perform-action
+          perform_action: scene.turn_on
+          target:
+            device_id: 2259095718cac4be067728899b9cfba7
+          data: {}
+        hold_action:
+          action: none
+        double_tap_action:
+          action: none
+        icon: mdi:power
+        icon_color: red
+        card_mod:
+          style: |
+            ha-card {
+              border: 1.5px ridge red !important;
+            }
+      - type: action
+        tap_action:
+          action: perform-action
+          perform_action: scene.turn_on
+          target:
+            entity_id: scene.volumen_ampli
+          data: {}
+        icon: mdi:volume-minus
+        icon_color: accent
+        hold_action:
+          action: none
+        double_tap_action:
+          action: none
+        card_mod:
+          style: |
+            ha-card {
+              border: 1.5px ridge #FF8C00 !important;
+            }
+      - type: action
+        tap_action:
+          action: perform-action
+          perform_action: scene.turn_on
+          target:
+            entity_id: scene.volumen_ampli_2
+          data: {}
+        icon: mdi:volume-plus
+        icon_color: accent
+        hold_action:
+          action: none
+        double_tap_action:
+          action: none
+        card_mod:
+          style: |
+            ha-card {
+              border: 1.5px ridge #FF8C00 !important;
+            }
+    alignment: center
+  - type: custom:mushroom-template-card
+    primary: >-
+      {% set file_type = states('sensor.volumio_file_type') %}
+
+      {% set samplerate = states('sensor.volumio_samplerate') %}
+
+      {% set bitrate = states('sensor.volumio_bitrate') %}
+
+
+      {% if is_state('media_player.volumio', 'playing') and file_type is not
+      none %}
+        {{ file_type }} - Sample Rate: {{ samplerate }} - Bitrate: {{ bitrate }}
+      {% else %}
+        <!-- Espacio reservado para los metadatos de audio -->
+      {% endif %}
+    picture: |
+      {% if is_state('sensor.volumio_file_type', 'FLAC') %}
+        /local/ico/flac3.png
+      {% elif is_state('sensor.volumio_file_type', 'MP3') %}
+        /local/ico/mp3.png
+      {% elif is_state('sensor.volumio_file_type', 'DSD') %}
+        /local/ico/dsd.png
+      {% else %}
+        /local/ico/cd1.png 
+      {% endif %}
+    tap_action: none
+    features_position: bottom
+    vertical: false
+    card_mod:
+      style: |
+        ha-card {
+          /* Fondo negro y transparencia */
+          background-color: rgba(0, 0, 0, 0.0) !important;
+          --ha-card-background: #000000 !important;   
+          /* Tus márgenes específicos para ajuste de posición y altura mínima */
+          margin: -9px 0px 0px 0px !important; 
+          padding: 0 !important;
+          --primary-text-color: #FF8C00;
+          border-radius: 1px;
+          box-shadow: none; 
+        }
+        mushroom-shape-icon {
+          --shape-color: trnasparen !important;
+          --shape-color-disabled: transparent !important;
+        }
+  - square: false
+    type: grid
+    cards:
+      - type: custom:button-card
+        entity: input_boolean.jazz_vocal
+        show_name: false
+        show_icon: false
+        show_entity_picture: false
+        show_state: true
+        state_display: |
+          [[[
+            if (states['input_boolean.jazz_vocal'].state === 'on')
+              return 'On';
+            return 'Off';
+          ]]]
+        styles:
+          card:
+            - aspect-ratio: 4/3
+            - background: url('/local/jukebox/Jazz_vocal.jpg')
+            - background-size: cover
+            - background-position: center
+            - font-size: 11px
+            - font-color: rgba(0, 0, 0, 0.9)
+            - font-weight: bold
+            - border-radius: 12px
+            - margin: 4px
+            - box-shadow: |
+                [[[
+                  if (states['input_boolean.jazz_vocal'].state === 'on')
+                    return '0 0 8px 3px #FF8C00';
+                  return 'none';
+                ]]]
+          state:
+            - position: absolute
+            - top: 5px
+            - right: 10px
+            - font-size: 0.8em
+            - font-weight: 900
+            - color: |
+                [[[
+                  if (states['input_boolean.jazz_vocal'].state === 'on')
+                    return '#FF8C00'; /* Color naranja para 'On' */
+                  return '#A0A0A0'; /* Gris para 'Off' */
+                ]]]
+      - type: custom:button-card
+        entity: input_boolean.philly_soul
+        show_name: false
+        show_icon: false
+        show_entity_picture: false
+        entity_picture: /local/jukebox/Philly.png
+        show_state: true
+        state_display: |
+          [[[
+            if (states['input_boolean.philly_soul'].state === 'on')
+              return 'On';
+            return 'Off';
+          ]]]
+        styles:
+          card:
+            - aspect-ratio: 4/3
+            - background: url('/local/jukebox/Philly.png')
+            - background-size: cover
+            - background-position: center
+            - font-size: 11px
+            - font-color: rgba(0, 0, 0, 0.9)
+            - font-weight: bold
+            - border-radius: 12px
+            - margin: 4px
+            - box-shadow: |
+                [[[
+                  if (states['input_boolean.philly_soul'].state === 'on')
+                    return '0 0 8px 3px #FF8C00';
+                  return 'none';
+                ]]]
+          state:
+            - position: absolute
+            - top: 5px
+            - right: 10px
+            - font-size: 0.8em
+            - font-weight: 900
+            - color: |
+                [[[
+                  if (states['input_boolean.philly_soul'].state === 'on')
+                    return '#FF8C00'; /* Color naranja para 'On' */
+                  return '#A0A0A0'; /* Gris para 'Off' */
+                ]]]
+      - type: custom:button-card
+        entity: input_boolean.blues
+        show_name: false
+        show_icon: false
+        show_entity_picture: false
+        entity_picture: /local/jukebox/blues.jpg
+        show_state: true
+        state_display: |
+          [[[
+            if (states['input_boolean.blues'].state === 'on')
+              return 'On';
+            return 'Off';
+          ]]]
+        styles:
+          card:
+            - aspect-ratio: 4/3
+            - background: url('/local/jukebox/Blues.jpg')
+            - background-size: cover
+            - background-position: center
+            - font-size: 11px
+            - font-color: rgba(0, 0, 0, 0.9)
+            - font-weight: bold
+            - border-radius: 12px
+            - margin: 4px
+            - box-shadow: |
+                [[[
+                  if (states['input_boolean.blues'].state === 'on')
+                    return '0 0 8px 3px #FF8C00';
+                  return 'none';
+                ]]]
+          state:
+            - position: absolute
+            - top: 5px
+            - right: 10px
+            - font-size: 0.8em
+            - font-weight: 900
+            - color: |
+                [[[
+                  if (states['input_boolean.blues'].state === 'on')
+                    return '#FF8C00'; /* Color naranja para 'On' */
+                  return '#A0A0A0'; /* Gris para 'Off' */
+                ]]]
+      - type: custom:button-card
+        entity: input_boolean.blues_rock
+        show_name: false
+        show_icon: false
+        show_entity_picture: false
+        entity_picture: /local/jukebox/blues_rock.jpeg
+        show_state: true
+        state_display: |
+          [[[
+            if (states['input_boolean.blues_rock'].state === 'on')
+              return 'On';
+            return 'Off';
+          ]]]
+        styles:
+          card:
+            - aspect-ratio: 4/3
+            - background: url('/local/jukebox/Blues_rock.jpg')
+            - background-size: cover
+            - background-position: center
+            - font-size: 11px
+            - font-color: rgba(0, 0, 0, 0.9)
+            - font-weight: bold
+            - border-radius: 12px
+            - margin: 4px
+            - box-shadow: |
+                [[[
+                  if (states['input_boolean.blues_rock'].state === 'on')
+                    return '0 0 8px 3px #FF8C00';
+                  return 'none';
+                ]]]
+          state:
+            - position: absolute
+            - top: 5px
+            - right: 10px
+            - font-size: 0.8em
+            - font-weight: 900
+            - color: |
+                [[[
+                  if (states['input_boolean.blues_rock'].state === 'on')
+                    return '#FF8C00'; /* Color naranja para 'On' */
+                  return '#A0A0A0'; /* Gris para 'Off' */
+                ]]]
+      - type: custom:button-card
+        entity: input_boolean.funk
+        show_name: false
+        show_icon: false
+        show_entity_picture: false
+        entity_picture: /local/jukebox/Funk.jpg
+        show_state: true
+        state_display: |
+          [[[
+            if (states['input_boolean.funk'].state === 'on')
+              return 'On';
+            return 'Off';
+          ]]]
+        styles:
+          card:
+            - aspect-ratio: 4/3
+            - background: url('/local/jukebox/Funk.jpg')
+            - background-size: cover
+            - background-position: center
+            - font-size: 11px
+            - font-color: rgba(0, 0, 0, 0.9)
+            - font-weight: bold
+            - border-radius: 12px
+            - margin: 4px
+            - box-shadow: |
+                [[[
+                  if (states['input_boolean.funk'].state === 'on')
+                    return '0 0 8px 3px #FF8C00';
+                  return 'none';
+                ]]]
+          state:
+            - position: absolute
+            - top: 5px
+            - right: 10px
+            - font-size: 0.8em
+            - font-weight: 900
+            - color: |
+                [[[
+                  if (states['input_boolean.funk'].state === 'on')
+                    return '#FF8C00'; /* Color naranja para 'On' */
+                  return '#A0A0A0'; /* Gris para 'Off' */
+                ]]]
+      - type: custom:button-card
+        entity: input_boolean.neo_soul
+        show_name: false
+        show_icon: false
+        show_entity_picture: false
+        entity_picture: /local/jukebox/Neo_soul.png
+        show_state: true
+        state_display: |
+          [[[
+            if (states['input_boolean.neo_soul'].state === 'on')
+              return 'On';
+            return 'Off';
+          ]]]
+        styles:
+          card:
+            - aspect-ratio: 4/3
+            - background: url('/local/jukebox/Neo_soul.png')
+            - background-size: cover
+            - background-position: center
+            - font-size: 11px
+            - font-color: rgba(0, 0, 0, 0.9)
+            - font-weight: bold
+            - border-radius: 12px
+            - margin: 4px
+            - box-shadow: |
+                [[[
+                  if (states['input_boolean.neo_soul'].state === 'on')
+                    return '0 0 8px 3px #FF8C00';
+                  return 'none';
+                ]]]
+          state:
+            - position: absolute
+            - top: 5px
+            - right: 10px
+            - font-size: 0.8em
+            - font-weight: 900
+            - color: |
+                [[[
+                  if (states['input_boolean.neo_soul'].state === 'on')
+                    return '#FF8C00'; /* Color naranja para 'On' */
+                  return '#A0A0A0'; /* Gris para 'Off' */
+                ]]]
+      - type: custom:button-card
+        entity: input_boolean.pop_soul
+        show_name: false
+        show_icon: false
+        show_entity_picture: false
+        entity_picture: /local/jukebox/Pop_soul.png
+        show_state: true
+        state_display: |
+          [[[
+            if (states['input_boolean.pop_soul'].state === 'on')
+              return 'On';
+            return 'Off';
+          ]]]
+        styles:
+          card:
+            - aspect-ratio: 4/3
+            - background: url('/local/jukebox/Pop_soul.png')
+            - background-size: cover
+            - background-position: center
+            - font-size: 11px
+            - font-color: rgba(0, 0, 0, 0.9)
+            - font-weight: bold
+            - border-radius: 12px
+            - margin: 4px
+            - box-shadow: |
+                [[[
+                  if (states['input_boolean.pop_soul'].state === 'on')
+                    return '0 0 8px 3px #FF8C00';
+                  return 'none';
+                ]]]
+          state:
+            - position: absolute
+            - top: 5px
+            - right: 10px
+            - font-size: 0.8em
+            - font-weight: 900
+            - color: |
+                [[[
+                  if (states['input_boolean.pop_soul'].state === 'on')
+                    return '#FF8C00'; /* Color naranja para 'On' */
+                  return '#A0A0A0'; /* Gris para 'Off' */
+                ]]]
+      - type: custom:button-card
+        entity: input_boolean.pop_latino
+        show_name: false
+        show_icon: false
+        show_entity_picture: false
+        entity_picture: /local/jukebox/Pop_latino.png
+        show_state: true
+        state_display: |
+          [[[
+            if (states['input_boolean.pop_latino'].state === 'on')
+              return 'On';
+            return 'Off';
+          ]]]
+        styles:
+          card:
+            - aspect-ratio: 4/3
+            - background: url('/local/jukebox/Pop_latino.png')
+            - background-size: cover
+            - background-position: center
+            - font-size: 11px
+            - font-color: rgba(0, 0, 0, 0.9)
+            - font-weight: bold
+            - border-radius: 12px
+            - margin: 4px
+            - box-shadow: |
+                [[[
+                  if (states['input_boolean.pop_latino'].state === 'on')
+                    return '0 0 8px 3px #FF8C00';
+                  return 'none';
+                ]]]
+          state:
+            - position: absolute
+            - top: 5px
+            - right: 10px
+            - font-size: 0.8em
+            - font-weight: 900
+            - color: |
+                [[[
+                  if (states['input_boolean.pop_latino'].state === 'on')
+                    return '#FF8C00'; /* Color naranja para 'On' */
+                  return '#A0A0A0'; /* Gris para 'Off' */
+                ]]]
+      - type: custom:button-card
+        entity: input_boolean.rb
+        show_name: false
+        show_icon: false
+        show_entity_picture: false
+        show_state: true
+        state_display: |
+          [[[
+            if (states['input_boolean.rb'].state === 'on')
+              return 'On';
+            return 'Off';
+          ]]]
+        styles:
+          card:
+            - aspect-ratio: 4/3
+            - background: url('/local/jukebox/R&B.jpg')
+            - background-size: cover
+            - background-position: center
+            - font-size: 11px
+            - font-color: rgba(0, 0, 0, 0.9)
+            - font-weight: bold
+            - border-radius: 12px
+            - margin: 4px
+            - box-shadow: |
+                [[[
+                  if (states['input_boolean.rb'].state === 'on')
+                    return '0 0 8px 3px #FF8C00';
+                  return 'none';
+                ]]]
+          state:
+            - position: absolute
+            - top: 5px
+            - right: 10px
+            - font-size: 0.8em
+            - font-weight: 900
+            - color: |
+                [[[
+                  if (states['input_boolean.rb'].state === 'on')
+                    return '#FF8C00'; /* Color naranja para 'On' */
+                  return '#A0A0A0'; /* Gris para 'Off' */
+                ]]]
+    columns: 4
+card_mod:
+  style: |
+    ha-card {
+      /* Fondo negro forzado para la tarjeta contenedora */
+      --ha-card-background: #000000;
+      --card-background-color: #000000;
+      /* Asegura que el color de texto es visible sobre el fondo oscuro */
+      --primary-text-color: #E0E0E0; 
+      --secondary-text-color: #A0A0A0;
+    }
