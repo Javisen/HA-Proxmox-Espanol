@@ -1,0 +1,68 @@
+.destaque {
+  transform: scale(1.02);
+  filter: brightness(1.1);
+  transition: all 0.3s;
+}
+.borde-neon-verde {
+  border: 2px solid #00ff00 !important;
+  box-shadow: 0 0 10px #00ff00;
+}
+.borde-neon-rojo {
+  border: 2px solid #FF0000 !important;
+  box-shadow: 0 0 10px #FF0000;
+}
+.borde-neon-naranja {
+  border: 2px solid #FFA200 !important;
+  box-shadow: 0 0 10px #FFA200;
+}
+.borde-neon-azul {
+  border: 2px solid #0037FF !important;
+  box-shadow: 0 0 10px #0037FF;
+}
+/* Estilo para un color sólido */
+.fondo-azul {
+  background-color: #1B0082 !important;
+}
+.fondo-verde {
+  background-color: #0B8200 !important;
+}
+.fondo-naranja {
+  background-color: #B07031 !important;
+}
+
+/* Estilo para un degradado moderno */
+.fondo-degradado-azul {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+}
+.fondo-degradado-rojo {
+  background: linear-gradient(135deg, #EB5E5E 0%, #F22929 100%) !important;
+}
+
+/* Estilo con transparencia (efecto cristal) */
+.fondo-cristal {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+### EL CONTENIDO SIGUIENTE MODIFICA TODO EL PANEL. USALO SI NO QUIERES LOS COLORES TAN ACENTUADOS ###
+/* Color de fondo base para todo el cuerpo */
+body {
+  background-color: #121212 !important; /* Negro muy suave, casi carbono */
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px) !important;
+  background-size: 40px 40px !important; /* Cuadrícula técnica sutil */
+  background-attachment: fixed;
+}
+
+/* Efecto de cristal para los widgets (opcional pero muy moderno) */
+.mantine-Paper-root {
+  background-color: rgba(30, 30, 30, 0.7) !important;
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+/* Mejora el contraste de los textos para que sean más legibles sobre el nuevo fondo */
+.mantine-Text-root {
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+}
