@@ -1,0 +1,19 @@
+alias: Reproducir Funk en Aleatorio
+sequence:
+  - target:
+      entity_id: media_player.volumio
+    data:
+      shuffle: true
+    action: media_player.shuffle_set
+  - target:
+      entity_id: media_player.volumio
+    data:
+      media:
+        media_content_id: >-
+          {"service": "mpd", "type": "folder", "title": "Funk", "uri":
+          "genres://Funk"}
+        media_content_type: music
+        metadata: {}
+    action: media_player.play_media
+mode: single
+description: Reproduce todo el genero Funk en modo aleatorio
