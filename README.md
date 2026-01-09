@@ -8,7 +8,7 @@
 Toda la inteligencia de la casa corre sobre un nodo de Proxmox Virtual Environment 9.1.4, optimizado para bajo consumo y alta disponibilidad.
 
 * **Hardware**: HP ELITEDESK 800 G2 DM (35W).
-* **CPU**: Intel Core i7-6500T.
+* **CPU**: Intel Core i7-6700T.
 * **Memoria**: 32 GB DDR4.
 * **Almacenamiento**: 1 TB NVME M.2 (Sistema y VMs) + 5 HDs adicionales para datos.
 * **Instancias**: VM con Home Assistant OS (HAOS), varios LXC (Jellyfin, AdGuard, Wireguard, MailCow, etc.).
