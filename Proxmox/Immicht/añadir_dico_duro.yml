@@ -1,0 +1,7 @@
+    volumes:
+      # Donde Immich guardará las fotos NUEVAS (Asegúrate de poner la ruta correcta en el .env)
+      - ${UPLOAD_LOCATION}:/usr/src/app/upload
+      - /etc/localtime:/etc/localtime:ro
+      # Tus carpetas históricas en modo SOLO LECTURA si necesitas importar las que ya tenias
+      - /media/Fotos/usuario1:/mnt/fotos_ususrio1:ro
+      - /media/Fotos/usuario2:/mnt/fotos_usuario2:ro
