@@ -30,7 +30,8 @@ Comando para extraer todas las fotos (.jpg, .jpeg, .png, etc.) de los directorio
 find /ruta/origen/ -type f -iregex ".*\.\(jpg\|jpeg\|png\|gif\)" -exec mv -t /ruta/destino_unificado/ {} +
 ```
 
-**Una vez ya tenemos la copia de las fotos en nuestro nuevo disco, hemos puesto todas las fotos en una sola carpeta y a salvo, ya podemos trabajar con seguridad con la configuracion del docker**
+> [!CAUTION]
+> **Una vez ya tenemos la copia de las fotos en nuestro nuevo disco, hemos puesto todas las fotos en una sola carpeta y a salvo, ya podemos trabajar con seguridad con la configuracion del docker.**
 
 ### 💾 Configuración de Volúmenes (docker-compose.yml)
 Asegúrate de configurar los puntos de montaje según tu estructura:
