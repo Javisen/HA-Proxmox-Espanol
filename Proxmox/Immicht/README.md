@@ -14,6 +14,21 @@ Este repositorio contiene la configuración para desplegar **Immich** en un LXC 
    `mp0: /mnt/pve/disco_fotos,mp=/media/Fotos`
 3. **Configurar el Docker:** Edita el `docker-compose.yml` para mapear las rutas de tus fotos.
 
+## 🔄 Migración y Backup con RSYNC
+Para usuarios que aún están utilizando la configuración original dentro de la carpeta de la aplicación, utilicen estos comandos para migrar las fotos hacia el disco externo y poder importarlas a la nueva configuracion: (repetir tantas veces como usuarios tengas)
+
+```
+# Copiar fotos del usuario 1 a su librería de Immich (Ruta local por defecto)
+rsync -avP /media/Fotos/usuario1/ /Immicht-aplication/Immich_Uploads/library/usuario1/
+
+# Copiar fotos del usuario 2 a su librería de Immich (Ruta local por defecto)
+rsync -avP /media/Fotos/usuario2/ /Immicht-aplication/Immich_Uploads/library/usuario2/
+```
+## 🖼️ Extracción Masiva de Imágenes (Limpieza)
+Comando para extraer todas las fotos (.jpg, .jpeg, .png, etc.) de los directorios por defecto que crea Immich para unificarlas en una sola carpeta raíz:
+```
+find /ruta/origen/ -type f -iregex ".*\.\(jpg\|jpeg\|png\|gif\)" -exec mv -t /ruta/destino_unificado/ {} +
+```
 ### 💾 Configuración de Volúmenes (docker-compose.yml)
 Asegúrate de configurar los puntos de montaje según tu estructura:
 
