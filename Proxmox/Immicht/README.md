@@ -10,7 +10,8 @@ Este repositorio contiene la configuración para desplegar **Immich** en un LXC 
 ## 🚀 Despliegue
 
 1. **Crear el LXC:** Ejecuta el script de creación en la consola de Proxmox.
-2. **Montar el disco:** Asegúrate de que el disco de datos esté montado en el host y pasado al LXC (Mount Point).
+2. **Montar el disco:** Asegúrate de que el disco de datos esté montado en el host y pasado al LXC editando el archivo `/etc/pve/lxc/ID_LXC.conf` añadiendo la línea (ejemplo):
+   `mp0: /mnt/pve/disco_fotos,mp=/media/Fotos`
 3. **Configurar el Docker:** Edita el `docker-compose.yml` para mapear las rutas de tus fotos.
 
 ### 💾 Configuración de Volúmenes (docker-compose.yml)
