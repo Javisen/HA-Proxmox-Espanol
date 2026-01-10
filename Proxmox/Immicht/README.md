@@ -27,3 +27,21 @@ Asegúrate de configurar los puntos de montaje según tu estructura:
       - /media/Fotos/usuario2:/mnt/fotos_usuario2:ro
 
 ```
+### 📄 Configuración del archivo .env
+Crea el archivo en `/immicht-aplication/.env` con el siguiente contenido:
+
+```env
+# RUTA DONDE SE GUARDARÁN LAS NUEVAS SUBIDAS
+UPLOAD_LOCATION=/media/Fotos/Immich_Uploads
+
+# DATOS DE LA BASE DE DATOS (Internos)
+DB_PASSWORD=postgres
+DB_USERNAME=postgres
+DB_DATABASE_NAME=immich
+
+# DONDE SE GUARDA LA BASE DE DATOS 
+DB_DATA_LOCATION=./postgres_data
+
+# VERSIÓN
+IMMICH_VERSION=release
+```
