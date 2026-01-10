@@ -4,8 +4,8 @@ Este repositorio contiene la configuración para desplegar **Immich** en un LXC 
 
 ## 📂 Estructura de Archivos
 * `/immicht-aplication/docker-compose.yml`: Configuración de servicios.
-* `script_lxc.sh`: Script para la creación automatizada del contenedor LXC en Proxmox.
-* `mount_disk.md`: Instrucciones para añadir discos externos al LXC.
+* `script_lxc.txt`: Script para la creación automatizada del contenedor LXC en Proxmox.
+* `añadir_disco.yml`: Instrucciones para añadir discos externos al LXC.
 
 ## 🚀 Despliegue
 
