@@ -72,9 +72,9 @@ IMMICH_VERSION=release
 
 Ejecutar dentro de la carpeta `/immicht-aplication/`:
 > ```diff
-* **Iniciar Immich:** `docker compose up -d`
-* **Parar Immich:** `docker compose down`
-* **Actualizar:** `docker compose pull && docker compose up -d`
-* **Logs en tiempo real:** `docker compose logs -f`
-* **Corregir Permisos:** `chown -R 1000:1000 /media/Fotos/Immich_Uploads`
+> **Iniciar Immich:** `docker compose up -d`
+> **Parar Immich:** `docker compose down`
+> **Actualizar:** `docker compose pull && docker compose up -d`
+> **Logs en tiempo real:** `docker compose logs -f`
+> **Corregir Permisos:** `chown -R 1000:1000 /media/Fotos/Immich_Uploads`
 > ```
