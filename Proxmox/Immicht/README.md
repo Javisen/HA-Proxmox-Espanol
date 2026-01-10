@@ -71,14 +71,10 @@ IMMICH_VERSION=release
 ## 🛠️ Comandos de Gestión
 
 Ejecutar dentro de la carpeta `/immicht-aplication/`:
-
+> ```diff
 * **Iniciar Immich:** `docker compose up -d`
 * **Parar Immich:** `docker compose down`
 * **Actualizar:** `docker compose pull && docker compose up -d`
 * **Logs en tiempo real:** `docker compose logs -f`
 * **Corregir Permisos:** `chown -R 1000:1000 /media/Fotos/Immich_Uploads`
-
-> [!IMPORTANT]
-> ```diff
-> - Una vez ya tenemos la copia de las fotos en nuestro nuevo disco, hemos puesto todas las fotos en una sola carpeta y a salvo, ya podemos trabajar con seguridad con la configuracion del docker.
 > ```
