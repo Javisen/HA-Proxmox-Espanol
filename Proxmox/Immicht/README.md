@@ -18,17 +18,20 @@ Este repositorio contiene la configuración para desplegar **Immich** en un LXC 
 Para usuarios que aún están utilizando la configuración original dentro de la carpeta de la aplicación, utilicen estos comandos para migrar las fotos hacia el disco externo y poder importarlas a la nueva configuracion: (repetir tantas veces como usuarios tengas)
 
 ```
-# Copiar fotos del usuario 1 a su librería de Immich (Ruta local por defecto)
-rsync -avP /media/Fotos/usuario1/ /Immicht-aplication/Immich_Uploads/library/usuario1/
+# Copiar fotos de la librería original de Immich hacia el disco externo (Usuario 1)
+rsync -avP /Immicht-aplication/Immich_Uploads/library/usuario1/ /media/Fotos/usuario1/
 
-# Copiar fotos del usuario 2 a su librería de Immich (Ruta local por defecto)
-rsync -avP /media/Fotos/usuario2/ /Immicht-aplication/Immich_Uploads/library/usuario2/
+# Copiar fotos de la librería original de Immich hacia el disco externo (Usuario 2)
+rsync -avP /Immicht-aplication/Immich_Uploads/library/usuario2/ /media/Fotos/usuario2/
 ```
 ## 🖼️ Extracción Masiva de Imágenes (Limpieza)
 Comando para extraer todas las fotos (.jpg, .jpeg, .png, etc.) de los directorios por defecto que crea Immich para unificarlas en una sola carpeta raíz:
 ```
 find /ruta/origen/ -type f -iregex ".*\.\(jpg\|jpeg\|png\|gif\)" -exec mv -t /ruta/destino_unificado/ {} +
 ```
+
+** Una vez ya tenemos la copia de las fotos en nuestro nuevo disco, hemos puesto todas las fotos en una sola carpeta y a salvo, ya podemos trabajar con seguridad con la configuracion del docker.
+
 ### 💾 Configuración de Volúmenes (docker-compose.yml)
 Asegúrate de configurar los puntos de montaje según tu estructura:
 
