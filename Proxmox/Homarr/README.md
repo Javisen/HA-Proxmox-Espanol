@@ -3,9 +3,9 @@
 Este directorio contiene la configuración visual y técnica del dashboard principal. Homarr actúa como la interfaz centralizada para gestionar todos los servicios alojados en el nodo Proxmox (HP EliteDesk) y el servidor de audio (Dell Optiplex).
 
 ## 📸 Vista General
-![Dashboard de Homarr](./homarr.png)
+![Dashboard de Homarr](./homarr.png) ![Dashboard de Movil Homarr](./movil.png)
 *Estado final del panel con el tema "Dark Tech" y los widgets organizados por categorías.*
-![Dashboard de Movil Homarr](./movil.png)
+
 *Estado final del panel con el tema "Dark Tech" y los widgets adaptados para movil.*
 
 ## 🎨 Personalización CSS (Look & Feel)
