@@ -32,7 +32,7 @@ Si la swap está ocupada pero tienes RAM libre, puedes liberarla:
 ```bash
 swapoff -a && swapon -a
 ```
-### ⚠️ Nota: si la RAM está al límite, la swap puede llenarse de nuevo automáticamente.
+⚠️ Nota: si la RAM está al límite, la swap puede llenarse de nuevo automáticamente.
 Mejor hacerlo tras liberar memoria de servicios pesados o tras reiniciar el nodo.
 
 ## 🛠️ 3. Gestión de VMs y Contenedores
