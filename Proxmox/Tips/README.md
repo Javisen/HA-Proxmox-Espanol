@@ -25,6 +25,8 @@ echo 20 > /sys/kernel/mm/ksm/sleep_millisecs
 cat /sys/kernel/mm/ksm/pages_shared
 cat /sys/kernel/mm/ksm/pages_sharing
 ```
+---
+
 ## 🧹 2. Limpiar swap manualmente
 
 Si la swap está ocupada pero tienes RAM libre, puedes liberarla:
@@ -35,12 +37,16 @@ swapoff -a && swapon -a
 ⚠️ Nota: si la RAM está al límite, la swap puede llenarse de nuevo automáticamente.
 Mejor hacerlo tras liberar memoria de servicios pesados o tras reiniciar el nodo.
 
+---
+
 ## 🛠️ 3. Gestión de VMs y Contenedores
 
 - Detener o eliminar **servicios no críticos** libera **RAM y CPU**  
 - Prioriza servicios **críticos** y monitoriza el uso de recursos con `top` o `glances`  
 - Observa **load average vs cores** para detectar saturación  
 - Ajusta **límites de memoria** en contenedores LXC si algunos servicios usan picos temporales
+
+---
 
 ## 📊 4. Monitorización y ajustes
 
@@ -57,6 +63,8 @@ Mejor hacerlo tras liberar memoria de servicios pesados o tras reiniciar el nodo
 - Documenta configuraciones, scripts y automatizaciones  
 - Mantén hardware modular y servicios aislados  
 - Considera **expandir RAM antes de añadir un nodo** para workloads intensivos en memoria
+
+---
 
 ## 🚀 6. Optimización avanzada
 
@@ -75,7 +83,9 @@ reboot
 sysctl vm.swappiness=10
 ```
 - Considerar zram para sistemas con RAM limitada
-- Revisar regularmente pages_shared de KSM para ver el ahorro real
+- Revisar regularmente pages_shared de KSM para ver el ahorro real.
+
+---
 
 ## 🔑 Conclusión
 
