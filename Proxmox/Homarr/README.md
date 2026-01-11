@@ -5,9 +5,7 @@ Este directorio contiene la configuración visual y técnica del dashboard princ
 ## 📸 Vista General
 <p align="center"> <img src="./homarr.png" alt="Dashboard de Homarr en navegador" height="380"> <img src="./movil.png" alt="Dashboard de Homarr en móvil" height="380"> </p>
 
-*Estado final del panel con el tema "Dark Tech" y los widgets organizados por categorías.*
-
-*Estado final del panel con el tema "Dark Tech" y los widgets adaptados para movil.*
+*Estado final del panel con el tema "Dark Tech" y los widgets organizados por categorías. Vista de Movil añadida*
 
 ## 🎨 Personalización CSS (Look & Feel)
 El panel utiliza una hoja de estilos personalizada para lograr una estética profesional, técnica y funcional. Los estilos están diseñados para reducir la fatiga visual mientras mantienen una jerarquía clara.
