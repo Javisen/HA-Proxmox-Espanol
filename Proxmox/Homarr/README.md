@@ -25,7 +25,39 @@ El panel utiliza una hoja de estilos personalizada para lograr una estética pro
 
 ---
 
-## 🛠️ Integración Especial: Volumio
+## 🛠️ Integración Especial: Volumio y Home Assistant
 Uno de los puntos clave de este dashboard es el widget de **Volumio**. 
-* **Escalado:** Se utiliza un wrapper HTML externo para incrustar la interfaz al **65%**, permitiendo el control total del reproductor sin ocupar todo el espacio del panel.
+* **Escalado:** Se utiliza un wrapper HTML externo para incrustar la interfaz al **65%**, permitiendo el control total del reproductor y de una tarjeta de Alarmo sin ocupar todo el espacio del panel.
 * **Seguridad:** Configuración de `use_x_frame_options: false` en Home Assistant para permitir la carga del recurso.
+* **Configuracion:** Añadido archivos HTML en local (/www) de Home Assistant
+**Codigo:**
+```
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            overflow: hidden; /* Evita barras de scroll dobles */
+            background-color: transparent;
+        }
+        #scaled-frame {
+            /* Escalado al 65% */
+            width: 153.84%;  /* 100 / 0.65 */
+            height: 153.84%; /* 100 / 0.65 */
+            border: none;
+            -webkit-transform: scale(0.65);
+            transform: scale(0.65);
+            -webkit-transform-origin: 0 0;
+            transform-origin: 0 0;
+        }
+    </style>
+</head>
+<body>
+    <iframe id="scaled-frame" src="http://192.168.31.118/playback"></iframe>
+</body>
+</html>
+```
