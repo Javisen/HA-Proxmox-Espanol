@@ -5,7 +5,7 @@ Este directorio contiene la configuración visual y técnica del dashboard princ
 ## 📸 Vista General
 ![Dashboard de Homarr](./homarr.png)
 *Estado final del panel con el tema "Dark Tech" y los widgets organizados por categorías.*
-![Dashboard de Movil Homarr](./movil.png)
+![Dashboard de Movil Homarr](./movil.jpg)
 *Estado final del panel con el tema "Dark Tech" y los widgets adaptados para movil.*
 
 ## 🎨 Personalización CSS (Look & Feel)
