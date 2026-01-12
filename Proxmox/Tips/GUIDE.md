@@ -19,11 +19,13 @@ apt update && apt full-upgrade -y
 * **Ver la Temperatura:** `sensors`
   Si no tienes instalado "sensors" puedes instalarlo con: `apt install lm-sensors`
 * **Passthrough de GPU:**
+  
   Comando rápido para permisos de GPU en LXC:
   ```bash
   chown -R root:video /dev/dri && chmod -R 777 /dev/dri
   ```
   
+  (Esto ayuda mucho cuando Jellyfin no reconoce el hardware para acelerar video).
 ---
 
 ## 📦 Gestión de Contenedores (LXC)
