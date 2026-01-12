@@ -111,6 +111,29 @@ Si quieres estar **100% seguro** de que no has roto nada antes de reiniciar el s
   ```
   **IMPORTANTE Si este comando te da algún error en rojo, no reinicies el servidor. Corrige el archivo primero; de lo contrario, el sistema podría no arrancar y entrar en modo de emergencia.**
 
+
+## 🌡️ Monitoreo de Temperatura y Hardware
+
+Dado que los equipos Mini-PC son compactos, es vital vigilar la temperatura para evitar el *thermal throttling*.
+
+* **Ver temperatura de la CPU y Sensores:**
+  ```bash
+  # Primero instala las herramientas si no las tienes
+  apt update && apt install lm-sensors -y
+  
+  # Ejecuta la detección (pulsa Enter a todo)
+  sensors-detect
+  
+  # Ver temperaturas en tiempo real
+  sensors
+  ```
+  
+* **Ver temperatura del disco NVMe:**
+  
+  ```bash
+  smartctl -a /dev/nvme0n1 | grep Temperature
+  ```
+  
 ---
 
 ## 🔄 Backups (vzdump)
