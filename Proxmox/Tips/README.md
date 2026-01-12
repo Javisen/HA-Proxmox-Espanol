@@ -45,6 +45,7 @@ Para que los ajustes de KSM no se pierdan al reiniciar el nodo:
   kernel/mm/ksm/sleep_millisecs = 20
   ```
 **¿Por qué esto es mejor?**
+
 Porque si solo lo activas en el GRUB, el kernel usará sus valores por defecto, que a veces son muy lentos (escanear solo 100 páginas). Con el archivo `sysfs.conf`, te aseguras de que tu servidor exprima la RAM exactamente como tú quieres.
 
 ---
