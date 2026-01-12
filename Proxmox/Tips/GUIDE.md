@@ -17,6 +17,7 @@ Este documento recopila **atajos, comandos y tips rápidos** para gestionar Prox
 apt update && apt full-upgrade -y
 ```
 * **Ver la Temperatura:** `sensors`
+  
   Si no tienes instalado "sensors" puedes instalarlo con: `apt install lm-sensors`
 * **Passthrough de GPU:**
   
