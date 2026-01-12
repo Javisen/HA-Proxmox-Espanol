@@ -25,6 +25,26 @@ echo 20 > /sys/kernel/mm/ksm/sleep_millisecs
 cat /sys/kernel/mm/ksm/pages_shared
 cat /sys/kernel/mm/ksm/pages_sharing
 ```
+### 🔄 Hacer KSM Permanente (Post-reinicio)
+
+Para que los ajustes de KSM no se pierdan al reiniciar el nodo:
+
+1. **Activar en el arranque:**
+   Edita `/etc/default/grub`, añade `ksm=1` a la línea `GRUB_CMDLINE_LINUX_DEFAULT` y ejecuta `update-grub`.
+
+2. **Mantener valores de escaneo personalizados:**
+   Instala `sysfsutils`:
+   ```bash
+   apt install sysfsutils -y
+   ```
+  Añade estas líneas al final de /etc/sysfs.conf:
+
+  ```
+  kernel/mm/ksm/run = 1
+  kernel/mm/ksm/pages_to_scan = 1000
+  kernel/mm/ksm/sleep_millisecs = 20
+  ```
+
 ---
 
 ## 🧹 2. Limpiar swap manualmente
