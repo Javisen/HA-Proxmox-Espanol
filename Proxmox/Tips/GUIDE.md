@@ -33,7 +33,7 @@ apt update && apt full-upgrade -y
 Si tras actualizar ves el mensaje "Newer kernel available... consider rebooting", significa que el sistema ha instalado una versión más reciente (ej. de 6.17.2 a 6.17.4) pero no la está usando.
 
 ### Pasos para reiniciar correctamente:
-1. **Apagar o suspender VMs/LXC:** Aunque Proxmox intenta hacerlo solo, es más seguro apagar manualmente los servicios críticos (como HAOS o Jellyfin).
+1. **Apagar o suspender VMs/LXC:** Aunque Proxmox intenta hacerlo solo, es más seguro apagar manualmente los servicios críticos (como HAOS, Jellyfin, Plex, etc).
 2. **Reiniciar desde consola:**
    ```bash
    reboot
