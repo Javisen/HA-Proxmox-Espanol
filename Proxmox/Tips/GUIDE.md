@@ -11,7 +11,11 @@ Este documento recopila **atajos, comandos y tips rápidos** para gestionar Prox
 * **Ver estado de los servicios de Proxmox:** ```bash
   systemctl status pveproxy pvedaemon ```
 * **Reiniciar la interfaz web (si se queda colgada):** `systemctl restart pveproxy`
-
+* **Actualizar todo el sistema Proxmox por terminal:**
+  Es la forma más segura de actualizar
+```bash
+apt update && apt full-upgrade -y
+```
 ---
 
 ## 📦 Gestión de Contenedores (LXC)
@@ -50,6 +54,53 @@ Este documento recopila **atajos, comandos y tips rápidos** para gestionar Prox
 ```bash
    losetup -D
 ```
+## 💾 Montaje Permanente de Discos (fstab)
+
+Para asegurar que tus discos (HDDs adicionales o USBs) se monten automáticamente al reiniciar el servidor.
+
+### 1. Identificar el UUID del disco
+Nunca uses `/dev/sdb1` en el fstab, ya que puede cambiar. Usa el **UUID**:
+```bash
+blkid
+---
+```
+### 2. Crear el punto de montaje
+```bash
+mkdir -p /mnt/nombre_disco
+```
+### 3. Editar el archivo fstab
+> [!CAUTION]
+> ⚠️ **¡PELIGRO!** Un error de sintaxis en este archivo puede impedir que Proxmox arranque (se quedará en modo emergencia). Asegúrate siempre de tener el UUID correcto antes de guardar.
+
+```bash
+nano /etc/fstab
+```
+**Añade la línea al final siguiendo este esquema (ejemplo para ext4):**
+```bash
+UUID=tu-uuid-aqui /mnt/nombre_disco ext4 defaults 0 2
+```
+**Nota para discos USB:** 
+Si el disco puede estar desconectado a veces, añade nofail para que el sistema arranque igual
+```bash
+UUID=tu-uuid-aqui /mnt/nombre_disco ext4 defaults,nofail 0 2
+```
+### 4. Recargar y Montar sin reiniciar
+Para aplicar los cambios sin reiniciar el servidor:
+
+```bash
+systemctl daemon-reload
+mount -a
+```
+### 💡 Un truco extra de seguridad
+
+Si quieres estar **100% seguro** de que no has roto nada antes de reiniciar el servidor, puedes ejecutar este comando después de editar el `fstab`:
+
+- **Verificar errores en fstab:**
+  ```bash
+  findmnt --verify
+  ```
+  [!IMPORTANT] Si este comando te da algún error en rojo, no reinicies el servidor. Corrige el archivo primero; de lo contrario, el sistema podría no arrancar y entrar en modo de emergencia.
+
 ---
 
 ## 🔄 Backups (vzdump)
