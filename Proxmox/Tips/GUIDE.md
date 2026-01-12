@@ -27,6 +27,21 @@ apt update && apt full-upgrade -y
   ```
   
   (Esto ayuda mucho cuando Jellyfin no reconoce el hardware para acelerar video).
+
+## 🆕 Actualización del Kernel
+
+Si tras actualizar ves el mensaje "Newer kernel available... consider rebooting", significa que el sistema ha instalado una versión más reciente (ej. de 6.17.2 a 6.17.4) pero no la está usando.
+
+### Pasos para reiniciar correctamente:
+1. **Apagar o suspender VMs/LXC:** Aunque Proxmox intenta hacerlo solo, es más seguro apagar manualmente los servicios críticos (como HAOS o Jellyfin).
+2. **Reiniciar desde consola:**
+   ```bash
+   reboot
+   ```
+3. **Verificar la nueva versión:** Una vez reiniciado, comprueba que ya estás en la versión nueva con:
+   ```
+   uname -r
+   ```
 ---
 
 ## 📦 Gestión de Contenedores (LXC)
