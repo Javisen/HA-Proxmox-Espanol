@@ -62,7 +62,6 @@ Para asegurar que tus discos (HDDs adicionales o USBs) se monten automáticament
 Nunca uses `/dev/sdb1` en el fstab, ya que puede cambiar. Usa el **UUID**:
 ```bash
 blkid
----
 ```
 ### 2. Crear el punto de montaje
 ```bash
