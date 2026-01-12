@@ -48,7 +48,7 @@ Para que los ajustes de KSM no se pierdan al reiniciar el nodo:
 
 Porque si solo lo activas en el GRUB, el kernel usará sus valores por defecto, que a veces son muy lentos (escanear solo 100 páginas). Con el archivo `sysfs.conf`, te aseguras de que tu servidor exprima la RAM exactamente como tú quieres.
 
-### Comando para que veas el ahorro:
+**Comando para que veas el ahorro:**
 
 ```
 echo "Ahorro actual de RAM: $(($(cat /sys/kernel/mm/ksm/pages_sharing) * 4 / 1024)) MB"
