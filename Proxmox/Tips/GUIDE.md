@@ -98,7 +98,7 @@ Si quieres estar **100% seguro** de que no has roto nada antes de reiniciar el s
   ```bash
   findmnt --verify
   ```
-  [!IMPORTANT] Si este comando te da algún error en rojo, no reinicies el servidor. Corrige el archivo primero; de lo contrario, el sistema podría no arrancar y entrar en modo de emergencia.
+  **IMPORTANTE Si este comando te da algún error en rojo, no reinicies el servidor. Corrige el archivo primero; de lo contrario, el sistema podría no arrancar y entrar en modo de emergencia.**
 
 ---
 
