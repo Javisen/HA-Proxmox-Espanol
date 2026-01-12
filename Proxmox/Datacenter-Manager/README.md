@@ -1,2 +1,3 @@
 **En construcción**
-/DCM.png
+
+<img src="./DCM.png" >
