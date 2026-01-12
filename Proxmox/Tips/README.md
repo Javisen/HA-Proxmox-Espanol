@@ -66,7 +66,20 @@ Mejor hacerlo tras liberar memoria de servicios pesados o tras reiniciar el nodo
 
 ---
 
-## 🚀 6. Optimización avanzada
+## 🚀 6. Optimización de SSD / NVMe (TRIM)
+
+Para mantener el rendimiento de tu **NVMe** y alargar su vida útil, es vital asegurar que el comando TRIM funcione correctamente tanto en el host como en las máquinas virtuales.
+
+> [!TIP]
+> **Recomendación para el almacenamiento:**
+> 1. **En VMs:** Asegúrate de marcar la casilla **Discard** en las opciones del disco (Hardware > Hard Disk > Edit) para que la VM informe al SSD de los bloques liberados.
+> 2. **En el Host:** Ejecuta el siguiente comando semanalmente (o mediante un cron) para limpiar el almacenamiento:
+>    ```bash
+>    fstrim -av
+>    ```
+
+---
+## 🚀 7. Optimización avanzada
 
 - Subir RAM para mayor estabilidad y margen  
 - Activar KSM permanentemente al inicio (`/etc/default/grub`)
