@@ -45,5 +45,44 @@ Este documento recopila **atajos, comandos y tips rápidos** para gestionar Prox
 * **Ver uso de disco de todo el sistema:** `df -h`
 * **Listar dispositivos de bloque (identificar USBs/Discos):** `lsblk`
 * **Ver estado de salud de discos físicos (SMART):** ```bash smartctl -a /dev/sdX ```
-  
-  smartctl -a /dev/sdX
+* **Limpiar dispositivos "loop" (Soluciona errores de backup):**
+  Útil cuando recibes el error "can't read superblock" en backups manuales o programados.
+```bash
+   losetup -D
+```
+---
+
+## 🔄 Backups (vzdump)
+
+* **Lanzar backup manual de un LXC:**
+  ```bash
+  vzdump ID --storage nombre_almacenamiento --compress zstd
+  ```
+* **Listar procesos de backup en ejecución:**
+  Útil para verificar si un backup se ha quedado colgado o para ver el progreso real desde la consola.
+  ```bash
+  ps aux | grep vzdump
+  ```
+* **Cancelar un proceso de backup manualmente:**
+  Si un backup se queda bloqueado y no puedes pararlo desde la interfaz web, identifica el PID con el comando anterior y usa:
+  ```bash
+  kill -9 PID
+  ```
+
+---
+## 🌐 Red y Conectividad
+
+* **Ver IPs asignadas al host Proxmox:** `ip a`
+* **Editar configuración de red (Puentes, IPs fijas):** > **¡Cuidado!** Un error aquí puede dejarte sin acceso local al servidor.
+  ```bash
+  nano /etc/network/interfaces
+  ```
+* **Probar si un puerto está abierto (útil para Túneles Cloudflare o servicios externos):**
+  ```bash
+  nc -zv IP_DESTINO PUERTO
+  ```
+* **Monitorizar tráfico de red en tiempo real:**
+  ```bash
+  nload
+  ```
+  *(Si no está instalado, puedes ponerlo con `apt install nload`)*
