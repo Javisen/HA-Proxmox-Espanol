@@ -1,4 +1,4 @@
-##LXC de la version final de Proxmox Datacenter Manager
+## LXC de la version final de Proxmox Datacenter Manager
 
 **En construcción** 
 
